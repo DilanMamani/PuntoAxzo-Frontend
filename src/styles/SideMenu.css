@@ -1,0 +1,59 @@
+/* Icono hamburguesa para móviles */
+.hamburger-menu {
+    display: none;
+    cursor: pointer;
+  }
+  
+  .hamburger-lines {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+  }
+  
+  /* Menú lateral para móviles */
+  .side-menu {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background-color: #003087;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  
+  .side-menu.open {
+    left: 0;
+  }
+  
+  .side-menu a {
+    display: block;
+    margin: 1rem 0;
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+  }
+  
+  .side-menu a:hover {
+    color: #cccccc;
+  }
+  
+  /* Ocultar barra lateral en desktop */
+  @media (min-width: 769px) {
+    .side-menu {
+      display: none;
+    }
+  }
+  @media (max-width: 768px) {
+    .hamburger-menu {
+      display: block;
+    }
+  
+    .logout-link {
+      display: none;
+    }
+  }
+  

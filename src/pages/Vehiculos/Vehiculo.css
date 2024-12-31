@@ -1,0 +1,66 @@
+.vehiculos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .add-marca-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .vehiculos-content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .marcas-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .marca-button {
+    display: block;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    text-align: left;
+  }
+  
+  .marca-button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .modelos-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .modelos-table th, .modelos-table td {
+    border: 1px solid #ced4da;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .btn-modify {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }

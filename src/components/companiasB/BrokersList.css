@@ -1,0 +1,204 @@
+/* Contenedor principal */
+.brokers-inspectores-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* Lista de brokers */
+.brokers-list {
+    flex: 1;
+}
+
+.inspectores-brokers-list {
+    flex: 2;
+}
+
+.brokers-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.broker-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    background-color: #005ea6;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.broker-button:hover {
+    background-color: #003d73;
+}
+
+.broker-button.active {
+    background-color: #007bff;
+    font-weight: bold;
+}
+
+/* Mensaje de "sin inspectores" */
+.no-inspectores-brokers {
+    color: #555;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Tabla de inspectores de brokers */
+.inspectores-brokers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.inspectores-brokers-table th,
+.inspectores-brokers-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.inspectores-brokers-table th {
+    background-color: #005ea6;
+    color: white;
+    font-weight: bold;
+}
+
+.inspectores-brokers-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.inspectores-brokers-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Botones de acción */
+.btn-broker-modify,
+.btn-broker-delete {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-broker-modify {
+    background-color: #ffc107; /* Amarillo */
+    color: #fff;
+}
+
+.btn-broker-modify:hover {
+    background-color: #e0a800;
+}
+
+.btn-broker-delete {
+    background-color: #dc3545; /* Rojo */
+    color: #fff;
+}
+
+.btn-broker-delete:hover {
+    background-color: #c82333;
+}
+
+/* Modal */
+.modal-overlay-broker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.add-modal-broker {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header-broker {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tab-button-broker {
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.tab-button-broker.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-body-broker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-actions-broker {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-broker-confirm {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-broker-cancel {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* Botón de agregar */
+.add-button {
+    background-color: #007bff; /* Azul */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px; /* Espacio inferior */
+  }
+  
+  .add-button:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al pasar el mouse */
+  }
+  
+  .add-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Efecto de enfoque */
+  }

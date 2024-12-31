@@ -1,0 +1,35 @@
+.companias-container {
+    padding: 20px;
+  }
+  
+  .companias-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .companias-tab {
+    background-color: #f5f5f5;
+    color: #0070ba;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .companias-tab.active {
+    background-color: #0070ba;
+    color: white;
+  }
+  
+  .companias-tab:hover {
+    background-color: #005ea6;
+    color: white;
+  }
+  
+  .companias-content {
+    margin-top: 20px;
+  }

@@ -1,0 +1,207 @@
+body {
+  font-family: 'PayPalOpen-Regular', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+/* Tarjeta de información */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  font-family: 'PayPalOpen-Bold';
+  color: #003087;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #545d68;
+}
+
+/* Mantén el diseño actual y ajusta solo lo necesario */
+
+.home-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap; /* Cambia para permitir que los elementos bajen */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+
+/* Contenedor izquierdo: datos del usuario */
+.left-content {
+  flex: 1 1 100%;
+  max-width: 45%;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: left;
+  margin-bottom: 2rem; /* Añadir margen inferior para espacio adicional */
+}
+
+.left-content p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #545d68;
+}
+
+
+/* Contenedor derecho: botones */
+.right-content {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-right: 4rem; /* Añadir margen derecho para más espacio */
+  margin-top: 1rem; /* Ajustar margen superior para que queden más abajo */
+}
+
+/* Botones de acción */
+.action-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #003087;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center;
+  padding: 5rem;
+  gap: 2rem; /* Espaciado entre los botones principales y los circulares */
+}
+
+
+/* Botones principales */
+.main-button {
+  background-color: #003087;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 0.75rem 5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.main-button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive para los botones */
+@media (max-width: 768px) {
+  .left-content {
+    max-width: 100%;
+  }
+
+  .right-content {
+    align-items: center;
+    flex: 1 1 100%;
+    margin-top: 2rem; /* Asegurar que los botones queden más abajo en móviles */
+  }
+
+  .main-button {
+    width: 100%;
+    max-width: 280px; 
+  }
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1rem;
+    gap: 2rem;
+  }
+  .action-button {
+    padding: 2rem rem;
+    background-color: #003087;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+}
+/* Contenedor de últimos proformas */
+.recent-proformas {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recent-proformas h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Tabla de últimos proformas */
+.recent-proformas-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.recent-proformas-table th,
+.recent-proformas-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.recent-proformas-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.recent-proformas-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.recent-proformas-table tr:hover {
+  background-color: #ddd;
+}
+
+/* Botón de editar */
+.edit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+

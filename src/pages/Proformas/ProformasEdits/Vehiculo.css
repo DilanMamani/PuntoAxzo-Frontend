@@ -1,0 +1,73 @@
+.vehiculo-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .vehiculos-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .vehiculos-list li {
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+  
+  .vehiculos-list li:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .buttons-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .buttons-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .buttons-container button:hover {
+    background-color: #ddd;
+  }
+  
+  .btn-vehiculo {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-vehiculo:hover {
+    background-color: #0056b3;
+  }

@@ -1,0 +1,75 @@
+/* Contenedor principal */
+.home-container {
+    font-family: 'PayPalOpen-Regular', Helvetica Neue, Arial, sans-serif;
+    background: linear-gradient(90deg, #faf8f5 50%, #fff 0%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Header */
+  .home-header {
+    background-color: #003087;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Barra de navegación */
+  .nav-bar {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: border-radius 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .nav-link.active {
+    background-color: #faf8f5a6;
+    color: #003087;
+    font-weight: bold;
+    border-radius: 25px;
+    border: 2px solid #003087;
+    padding: 0.5rem 1rem;
+    transition: border-radius 0.3s ease;
+  }
+  
+  /* Botón de cerrar sesión */
+  .logout-link {
+    margin-left: auto;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .logout-link:hover {
+    color: #cccccc;
+  }
+  @media (max-width: 768px) {
+    .nav-bar {
+      justify-content: flex-start;
+    }
+  
+    .nav-link {
+      display: none;
+    }
+}

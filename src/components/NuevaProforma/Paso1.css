@@ -1,0 +1,90 @@
+/* Paso1.css */
+
+.paso1-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .paso1-container h2 {
+    font-size: 1.8rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .selector-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .tipo-trabajo-container,
+  .seguros-container,
+  .inspectores-seguro-container,
+  .brokers-container,
+  .inspectores-broker-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  select {
+    height: 40px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    outline: none;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+  }
+  
+  select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .inspectores-seguro-container select,
+  .inspectores-broker-container select {
+    max-width: 100%;
+  }
+  .btn-next-custom {
+    background-color: #007bff; /* Azul */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-next-custom:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+  }
+  
+  .btn-next-custom:disabled {
+    background-color: #cccccc; /* Gris para estado deshabilitado */
+    cursor: not-allowed;
+  }

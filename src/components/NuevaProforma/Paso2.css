@@ -1,0 +1,93 @@
+.paso2-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sugerencias-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.sugerencias-list li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sugerencias-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-back-custom {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-next-custom {
+  background-color: #4caf50;
+  color: white;
+}
+.table-container {
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho */
+  margin: 20px 0;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal si es necesario */
+  background-color: #fff; /* Fondo blanco para destacar la tabla */
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Agrega una sombra sutil */
+}
+
+table {
+  width: 100%; /* Asegura que las columnas se ajusten al contenedor */
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-align: left;
+}
+
+thead th {
+  background-color: #f5f5f5; /* Fondo más claro para el encabezado */
+  color: #333; /* Color del texto */
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Línea para separar filas */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Color alternado para filas pares */
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1; /* Fondo cuando el cursor está sobre la fila */
+}
+
+tfoot {
+  font-weight: bold;
+  background-color: #f5f5f5;
+}
+
+tfoot td {
+  padding: 10px;
+}
