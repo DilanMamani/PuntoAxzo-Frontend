@@ -559,7 +559,10 @@ const handleFotosChange = (e) => {
       <div className="proforma-section">
         <h2>Resumen Financiero</h2>
         <p>
-          <strong>Subtotal:</strong> {proformaData.subtotal || "0.00"}
+          <strong>Moneda:</strong>{proformaData.seguro?.moneda?.nombre|| "No tengo"}
+        </p>
+        <p>
+          <strong>Subtotal:</strong> {proformaData.subtotal || "0.00" }
         </p>
         <p>
           <strong>Descuento Total:</strong> {proformaData.descuento || "0.00"}
@@ -569,7 +572,7 @@ const handleFotosChange = (e) => {
         </p>
         
         <p>
-          <strong>Total Literal:</strong> {proformaData.totalliteral || "0.00"}
+          <strong>Total Literal:</strong> {proformaData.totalliteral || "0.00"} {" "}{proformaData.seguro?.moneda?.nombre|| "No tengo"}
         </p>
         
       </div>
