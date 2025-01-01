@@ -17,6 +17,7 @@ const BaseAnexos = () => {
   const [detalles, setDetalles] = useState([]);
   const [proformaData, setProformaData] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const [descuentoTotal, setDescuentoTotal] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalLiteral, setTotalLiteral] = useState("");
@@ -449,7 +450,7 @@ const fetchFotos = async (idanexo) => {
                     {anexoData.ordenpdf ? (
                       <>
                         <PdfViewer
-                          pdfUrl={`http://localhost:3000/uploads/anexos/${
+                          pdfUrl={`${API_URL}/uploads/anexos/${
                             typeof anexoData.ordenpdf === "object"
                             ? anexoData.ordenpdf.filename || anexoData.ordenpdf.data
                             : anexoData.ordenpdf

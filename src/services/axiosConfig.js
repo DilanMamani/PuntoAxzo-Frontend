@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://172.20.10.2:3000', // Cambia si la baseURL es diferente
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000', // Cambia según el entorno
 });
 
 // Agregar token de autorización automáticamente

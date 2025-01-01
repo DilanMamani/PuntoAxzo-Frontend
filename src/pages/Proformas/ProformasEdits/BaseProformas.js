@@ -21,6 +21,7 @@ const BaseProformas = () => {
   const [seguro, setSeguro] = useState("Sin determinar");
   const [broker, setBroker] = useState("Sin determinar");
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [file, setFile] = useState(null);
@@ -604,7 +605,7 @@ const handleFotosChange = (e) => {
     {proformaData.ordenpdf ? (
       <>
         <PdfViewer
-    pdfUrl={`http://localhost:3000/uploads/proformas/${
+    pdfUrl={`${API_URL}/uploads/proformas/${
         typeof proformaData.ordenpdf === "object"
             ? proformaData.ordenpdf.filename || proformaData.ordenpdf.data
             : proformaData.ordenpdf
