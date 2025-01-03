@@ -523,7 +523,7 @@ const handleFotosChange = (e) => {
                   <td>{detalle.item}</td>
                   <td>{detalle.precio}</td>
                   <td>{detalle.descuento}</td>
-                  <td>{detalle.total}</td>
+                  <td>{(detalle.precio - detalle.descuento).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

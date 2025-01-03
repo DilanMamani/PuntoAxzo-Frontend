@@ -161,7 +161,7 @@ const detallesReparacion = `
             <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
             <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
             <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.total || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${(detalle.precio - detalle.descuento).toFixed(2) || "0.00"} ${moneda}</td>
           </tr>
         `
           )
@@ -191,13 +191,14 @@ const resumenFinanciero = `
     Descuento (
     ${
       proformaData.descuento && proformaData.descuento > 0
-        ? Math.floor((proformaData.subtotal / proformaData.descuento) || 0)
+        ? Math.floor((proformaData.descuento / proformaData.subtotal) * 100) || 0
         : 0
     }%
     ):
   </strong>
   ${proformaData.descuento || "0.00"} ${moneda}
 </p>
+  
       <p style="margin: 0;"><strong>Total:</strong> ${proformaData.total || "0.00"} ${moneda}</p>
     </div>
     <!-- Total Literal alineado a la izquierda -->
