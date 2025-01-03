@@ -141,7 +141,9 @@ const detallesReparacion = `
           <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
           <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
           <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
-          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
+          ${
+            detalles.some((detalle) => detalle.descuento > 0)
+              ? `<th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
           ${detalles && detalles.length > 0 
             ? `Descuento ${
                 detalles[0]?.precio && detalles[0]?.descuento && detalles[0]?.descuento > 0 
@@ -149,7 +151,10 @@ const detallesReparacion = `
                   : 0
               }%`
             : "Descuento"}</th>
-          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>
+            <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+              : ""
+          }
+          
         </tr>
       </thead>
       <tbody>
@@ -157,11 +162,16 @@ const detallesReparacion = `
           .map(
             (detalle, i) => `
           <tr>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: background-color: #fff; color: #000;">${(detalle.precio - detalle.descuento).toFixed(2) || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            ${
+              detalles.some((d) => d.descuento > 0)
+                ? `<td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+                <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+                : ""
+            }
+            
           </tr>
         `
           )
@@ -185,20 +195,20 @@ const resumenFinanciero = `
   <div style="margin-top: 10px; font-size: 10px; font-family: Arial, sans-serif;">
     <!-- Totales alineados a la derecha -->
     <div style="text-align: right; margin-bottom: 10px;">
-      <p style="margin: 0;"><strong>Subtotal:</strong> ${proformaData.subtotal || "0.00"} ${moneda}</p>
-      <p style="margin: 0;">
-  <strong>
-    Descuento (
-    ${
-      proformaData.descuento && proformaData.descuento > 0
-        ? Math.floor((proformaData.descuento / proformaData.subtotal) * 100) || 0
-        : 0
-    }%
-    ):
-  </strong>
-  ${proformaData.descuento || "0.00"} ${moneda}
-</p>
-  
+      ${
+        proformaData.descuento && proformaData.descuento > 0
+          ? `
+            <p style="margin: 0;"><strong>Subtotal:</strong> ${proformaData.subtotal || "0.00"} ${moneda}</p>
+            <p style="margin: 0;">
+              <strong>
+                Descuento (
+                ${Math.floor((proformaData.descuento / proformaData.subtotal) * 100) || 0}%):
+              </strong>
+              ${proformaData.descuento || "0.00"} ${moneda}
+            </p>
+          `
+          : ""
+      }
       <p style="margin: 0;"><strong>Total:</strong> ${proformaData.total || "0.00"} ${moneda}</p>
     </div>
     <!-- Total Literal alineado a la izquierda -->
