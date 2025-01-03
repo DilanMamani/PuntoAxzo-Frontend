@@ -233,13 +233,16 @@ const notaValidez = `
     pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detalleRepuestos+ resumenFinanciero+notaValidez;
 
     // Opciones para html2pdf.js
-    const options = {
-      margin: 0.5,
-      filename: `Proforma-${idProforma}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
+const options = {
+  margin: 0.5,
+  filename: 
+    proformaData.tipotrabajo?.tipoTrabajo === "Particular"
+      ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
+      : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`,
+  image: { type: "jpeg", quality: 0.98 },
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+};
 
 
     // Generar el PDF
