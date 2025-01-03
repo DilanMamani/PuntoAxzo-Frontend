@@ -11,7 +11,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
   const [itemBusqueda, setItemBusqueda] = useState("");
   const [itemsSugeridos, setItemsSugeridos] = useState([]);
   const [itemSeleccionado, setItemSeleccionado] = useState(null);
-  
   const [precio, setPrecio] = useState("");
   const [descuento, setDescuento] = useState("");
   const [detalles, setDetalles] = useState([]);
@@ -22,6 +21,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
 
   const getToken = () => localStorage.getItem("token");
 
+  // Carga niveles por seguro
   const cargarNiveles = async () => {
     try {
       const token = getToken();
@@ -34,6 +34,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
+  // Carga monedas disponibles
   const cargarMonedas = async () => {
     try {
       const token = getToken();
@@ -45,34 +46,38 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       console.error("Error al cargar monedas:", error);
     }
   };
+
+  // Carga los detalles de la proforma
   const cargarDetallesProforma = async () => {
-  try {
-    const token = getToken();
-    const response = await api.get(`/api/detalleproforma/${data.idProforma}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    try {
+      const token = getToken();
+      const response = await api.get(`/api/detalleproforma/${data.idProforma}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (response.data && response.data.data) {
-      const detallesCargados = response.data.data.map((detalle) => ({
-        idDetalleProforma: detalle.iddetalle,
-        detalle: detalle.detalle, // Detalle del ítem
-        item: detalle.item, // Ítem relacionado (nombre)
-        precio: parseFloat(detalle.precio).toFixed(2), // Convertimos el precio a decimal con dos decimales
-        descuento: parseFloat(detalle.descuento).toFixed(2), // Convertimos el descuento a decimal con dos decimales
-        total: parseFloat(detalle.total).toFixed(2), // Convertimos el total a decimal con dos decimales
-      }));
+      if (response.data?.data) {
+        const detallesCargados = response.data.data.map((detalle) => ({
+          idDetalleProforma: detalle.iddetalle,
+          detalle: detalle.detalle,
+          item: detalle.item,
+          precio: parseFloat(detalle.precio).toFixed(2),
+          descuento: parseFloat(detalle.descuento).toFixed(2),
+          total: parseFloat(detalle.total).toFixed(2),
+        }));
 
-      setDetalles(detallesCargados);
-      calcularSubtotal(detallesCargados);
-    } else {
-      console.warn("La respuesta no contiene detalles de la proforma.");
-      setDetalles([]);
-      calcularSubtotal([]);
+        setDetalles(detallesCargados);
+        calcularSubtotal(detallesCargados);
+      } else {
+        console.warn("No se encontraron detalles de la proforma.");
+        setDetalles([]);
+        calcularSubtotal([]);
+      }
+    } catch (error) {
+      console.error("Error al cargar los detalles de la proforma:", error);
     }
-  } catch (error) {
-    console.error("Hubo un error al cargar los detalles de la proforma. Por favor, inténtalo de nuevo.");
-  }
-};
+  };
+
+  // Busca detalles por texto
   const buscarDetalles = async (texto) => {
     if (!texto || texto.length < 3) {
       setDetallesSugeridos([]);
@@ -89,6 +94,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
+  // Busca ítems por texto
   const buscarItems = async (texto) => {
     if (!texto || texto.length < 3 || !idNivel) {
       setItemsSugeridos([]);
@@ -105,19 +111,19 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
-  const handleDetalleSeleccionado = (detalle) => {
-    setDetalle(detalle.detalle);
-    setIdDetalle(detalle.idDetalleP);
-    setDetallesSugeridos([]);
+  // Elimina un detalle de la proforma
+  const eliminarDetalle = async (idDetalleProforma) => {
+    try {
+      const token = getToken();
+      await api.delete(`/api/detalleproforma/${idDetalleProforma}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      cargarDetallesProforma();
+    } catch (error) {
+      console.error("Error al eliminar el detalle:", error);
+      alert("No se pudo eliminar el detalle.");
+    }
   };
-
-  const handleItemSeleccionado = (item) => {
-    setItemSeleccionado(item);
-    setItemBusqueda(item.detalle);
-    setPrecio(item.precio);
-    setItemsSugeridos([]);
-  };
-
   const crearActualizarDetalle = async (detalleTexto) => {
     try {
       const token = getToken();
@@ -141,18 +147,17 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       return null;
     }
   };
-
   const crearActualizarItem = async () => {
     if (!itemBusqueda || !precio || !idNivel) {
       alert("El ítem, precio y nivel son obligatorios.");
       return null;
     }
-
+  
     if (!itemSeleccionado?.idItem && !idMoneda) {
       setShowMonedaModal(true);
       return null;
     }
-
+  
     try {
       const token = getToken();
       if (itemSeleccionado?.idItem) {
@@ -175,28 +180,19 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       return null;
     }
   };
-  const calcularSubtotal = (detallesCalculados = detalles) => {
-    const total = detallesCalculados.reduce(
-      (acc, detalle) => acc + parseFloat(detalle.total || 0),
-      0
-    );
-    setSubtotal(total.toFixed(2));
+  const handleDetalleSeleccionado = (detalle) => {
+    setDetalle(detalle.detalle);
+    setIdDetalle(detalle.idDetalleP);
+    setDetallesSugeridos([]);
+  };
+  const handleItemSeleccionado = (item) => {
+    setItemSeleccionado(item);
+    setItemBusqueda(item.detalle);
+    setPrecio(item.precio);
+    setItemsSugeridos([]);
   };
 
-
-  const eliminarDetalle = async (idDetalleProforma) => {
-    try {
-      const token = getToken();
-      await api.delete(`/api/detalleproforma/${idDetalleProforma}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      cargarDetallesProforma();
-    } catch (error) {
-      console.error("Error al eliminar detalle:", error);
-      alert("Error al eliminar el detalle.");
-    }
-  };
-
+  // Agrega un nuevo detalle a la proforma
   const agregarDetalle = async () => {
     try {
       const detalleId = idDetalle || (await crearActualizarDetalle(detalle));
@@ -230,6 +226,13 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
+  // Calcula el subtotal de los detalles
+  const calcularSubtotal = (detallesCalculados = detalles) => {
+    const total = detallesCalculados.reduce((acc, detalle) => acc + parseFloat(detalle.total || 0), 0);
+    setSubtotal(total.toFixed(2));
+  };
+
+  // Limpia los campos del formulario
   const limpiarCampos = () => {
     setDetalle("");
     setIdDetalle(null);
@@ -239,27 +242,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     setDescuento("");
     setIdMoneda("");
   };
-  const handleAvanzar = () => {
-    // Actualiza los datos globales
-    setData((prevData) => ({
-      ...prevData,
-      detalles, // Guardar los detalles actuales
-      subtotal, // Guardar el subtotal actual
-    }));
-  
-    // Guarda los datos en el localStorage
-    localStorage.setItem(
-      "data",
-      JSON.stringify({
-        ...data,
-        detalles,
-        subtotal,
-      })
-    );
-  
-    // Avanza al siguiente paso
-    avanzarPaso();
-  };
+
   useEffect(() => {
     cargarNiveles();
     cargarMonedas();
@@ -268,7 +251,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
 
   return (
     <div className="paso4-container">
-         {/* Moneda modal */}
       {showMonedaModal && (
         <div className="modal">
           <div className="modal-content">
@@ -285,6 +267,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
           </div>
         </div>
       )}
+
       <h2>Paso 4: Detalle de Proforma</h2>
       <div className="detalle-form">
         <label>Nivel:</label>
@@ -352,43 +335,37 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       </div>
 
       <h3>Detalles Agregados</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Detalle</th>
-      <th>Ítem</th>
-      <th>Precio</th>
-      <th>Descuento</th>
-      <th>Total</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {detalles.map((detalle) => (
-      <tr key={detalle.idDetalleProforma}>
-        <td>{detalle.detalle}</td>
-        <td>{detalle.item}</td> {/* Muestra el ítem aquí */}
-        <td>{detalle.precio}</td>
-        <td>{detalle.descuento}</td>
-        <td>{detalle.total}</td>
-        <td>
-          <button onClick={() => eliminarDetalle(detalle.idDetalleProforma)}>
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+      <table>
+        <thead>
+          <tr>
+            <th>Detalle</th>
+            <th>Ítem</th>
+            <th>Precio</th>
+            <th>Descuento</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {detalles.map((detalle) => (
+            <tr key={detalle.idDetalleProforma}>
+              <td>{detalle.detalle}</td>
+              <td>{detalle.item}</td>
+              <td>{detalle.precio}</td>
+              <td>{detalle.descuento}</td>
+              <td>{detalle.total}</td>
+              <td>
+                <button onClick={() => eliminarDetalle(detalle.idDetalleProforma)}>Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <h3>Subtotal: {subtotal}</h3>
-
-      {/* Botón Siguiente */}
-      <div className="boton-siguiente">
-  <button className="btn-next" onClick={handleAvanzar}>
-    Siguiente
-  </button>
-</div>
+      <button className="btn-next" onClick={avanzarPaso}>
+        Siguiente
+      </button>
     </div>
   );
 };

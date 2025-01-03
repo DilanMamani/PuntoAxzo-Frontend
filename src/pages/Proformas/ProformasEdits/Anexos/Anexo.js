@@ -401,6 +401,9 @@ const fetchFotos = async (idanexo) => {
 
               <div className="proforma-section">
                 <h2>Totales</h2>
+                    <p>
+              <strong>Moneda:</strong>{proformaData.seguro?.moneda?.nombre|| "No tengo"}
+            </p>
                 <p>
                   <strong>Subtotal:</strong> {subtotal} Bs
                 </p>
@@ -411,7 +414,7 @@ const fetchFotos = async (idanexo) => {
                   <strong>Total General:</strong> {total} Bs
                 </p>
                 <p>
-                  <strong>Total Literal:</strong> {totalLiteral || "No disponible"}
+                  <strong>Total Literal:</strong> {totalLiteral || "No disponible"}{". "}{proformaData.seguro?.moneda?.nombre|| "No tengo"}
                 </p>
               </div>
               <div className="proforma-section">

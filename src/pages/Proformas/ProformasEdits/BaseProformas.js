@@ -9,9 +9,11 @@ import "../../../styles/SideMenu.css";
 import "../../../styles/Header.css";
 import "./BaseProformas.css";
 import PdfCreateProforma from "./PdfCreateProforma";
+
 import PdfViewer from "../../../components/PdfViewer";
 
 const BaseProformas = () => {
+  const logoURL = require("../../../assets/LogoPuntoAxzo.jpg");
   const { idProforma } = useParams();
   const navigate = useNavigate();
   const [proformaData, setProformaData] = useState(null);
@@ -572,7 +574,7 @@ const handleFotosChange = (e) => {
         </p>
         
         <p>
-          <strong>Total Literal:</strong> {proformaData.totalliteral || "0.00"} {" "}{proformaData.seguro?.moneda?.nombre|| "No tengo"}
+          <strong>Total Literal:</strong> {proformaData.totalliteral || "0.00"} {". "}{proformaData.seguro?.moneda?.nombre|| "No tengo"}
         </p>
         
       </div>
@@ -689,8 +691,12 @@ const handleFotosChange = (e) => {
   detalles={detalles}
   repuestos={repuestos}
   marca={marca}
+  broker = {broker}
   idProforma={idProforma}
-  fotos={fotos}
+  fotos={fotos}// Ruta o base64 de la firma
+  logoURL={logoURL}  // Ruta o base64 del logo
+  tipotrabajo={proformaData.tipotrabajo?.tipoTrabajo} // Particular, Seguro, SeguroRC
+  monedas={proformaData.seguro?.moneda?.nombre || "No definida"} // Moneda asociada
 />
       
     </div>
