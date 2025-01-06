@@ -209,7 +209,7 @@ const resumenFinanciero = `
           `
           : ""
       }
-      <p style="margin: 0;"><strong>Total:</strong> ${proformaData.total || "0.00"} ${moneda}</p>
+      <p style="margin: 0;"><strong>Total Trabajos Chapa y Pintura (NO INLCUYE REPUESTOS):</strong> ${proformaData.total || "0.00"} ${moneda}</p>
     </div>
     <!-- Total Literal alineado a la izquierda -->
     <div style="text-align: left; margin-top: 10px;">
