@@ -46,7 +46,7 @@ const PdfCreateProforma = ({ proformaData, detalles,repuestos, marca,broker, idP
 <div style="text-align: left; font-size: 10px; margin-top: -10px;">
   <p style="margin: 0;">Taller Automotriz Punto Axzo ¡Pintura en Horno!</p>
   <p style="margin: 0;">Correo: jorgemamani_axzo@hotmail.com</p>
-  <p style="margin: 0;">Teléfono: +591 70104161</p>
+  <p style="margin: 0;">Teléfono: 70104161</p>
   <br>
 </div>
 `;
