@@ -21,7 +21,14 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
 
   const getToken = () => localStorage.getItem("token");
 
-  // Carga niveles por seguro
+  const calcularSubtotal = (detallesCalculados = detalles) => {
+    const total = detallesCalculados.reduce(
+      (acc, detalle) => acc + parseFloat(detalle.total || 0),
+      0
+    );
+    setSubtotal(total.toFixed(2));
+  };
+
   const cargarNiveles = async () => {
     try {
       const token = getToken();
@@ -33,21 +40,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       console.error("Error al cargar niveles:", error);
     }
   };
-
-  // Carga monedas disponibles
-  const cargarMonedas = async () => {
-    try {
-      const token = getToken();
-      const response = await api.get("/api/monedas", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMonedas(response.data || []);
-    } catch (error) {
-      console.error("Error al cargar monedas:", error);
-    }
-  };
-
-  // Carga los detalles de la proforma
   const cargarDetallesProforma = async () => {
     try {
       const token = getToken();
@@ -77,7 +69,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
-  // Busca detalles por texto
   const buscarDetalles = async (texto) => {
     if (!texto || texto.length < 3) {
       setDetallesSugeridos([]);
@@ -94,7 +85,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
-  // Busca ítems por texto
   const buscarItems = async (texto) => {
     if (!texto || texto.length < 3 || !idNivel) {
       setItemsSugeridos([]);
@@ -110,20 +100,57 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       console.error("Error al buscar ítems:", error);
     }
   };
-
-  // Elimina un detalle de la proforma
-  const eliminarDetalle = async (idDetalleProforma) => {
+  const cargarMoneda = async () => {
     try {
       const token = getToken();
-      await api.delete(`/api/detalleproforma/${idDetalleProforma}`, {
+      const response = await api.get(`/api/seguros/${data.idSeguro}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      cargarDetallesProforma();
+  
+      // Extraer idMoneda del seguro
+      const monedaId = response.data.data?.idMoneda || null;
+      if (monedaId) {
+        setIdMoneda(monedaId); // Guardar en el estado
+      } else {
+        console.warn("No se encontró moneda para el seguro.");
+        setIdMoneda(""); // Limpia el estado si no se encuentra
+      }
     } catch (error) {
-      console.error("Error al eliminar el detalle:", error);
-      alert("No se pudo eliminar el detalle.");
+      console.error("Error al cargar moneda:", error);
+      alert("No se pudo cargar la moneda asociada al seguro.");
     }
   };
+
+  const crearNuevoItem = async () => {
+      console.log(itemBusqueda, idNivel, idMoneda, parseFloat(precio).toFixed(2));
+      console.log("Ítem buscado:", itemBusqueda); // Confirmar que se usa el estado correcto
+      console.log("Precio:", precio);
+    
+      if (!itemBusqueda || !precio || !idNivel || !idMoneda) {
+        alert("El ítem, precio, nivel y moneda son obligatorios.");
+        return null;
+      }
+    
+      try {
+        const token = getToken();
+        const response = await api.post(
+          "/api/precios",
+          {
+            detalle: itemBusqueda, // Aquí usamos itemBusqueda
+            precio: parseFloat(precio).toFixed(2),
+            idMoneda,
+            idNivel,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+    
+        return response.data.data;
+      } catch (error) {
+        console.error("Error al crear un nuevo ítem:", error);
+        alert("No se pudo crear un nuevo ítem.");
+        return null;
+      }
+    };
   const crearActualizarDetalle = async (detalleTexto) => {
     try {
       const token = getToken();
@@ -147,44 +174,13 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       return null;
     }
   };
-  const crearActualizarItem = async () => {
-    if (!itemBusqueda || !precio || !idNivel) {
-      alert("El ítem, precio y nivel son obligatorios.");
-      return null;
-    }
-  
-    if (!itemSeleccionado?.idItem && !idMoneda) {
-      setShowMonedaModal(true);
-      return null;
-    }
-  
-    try {
-      const token = getToken();
-      if (itemSeleccionado?.idItem) {
-        await api.put(
-          `/api/precios/${itemSeleccionado.idItem}`,
-          { detalle: itemBusqueda, precio, idNivel },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        return itemSeleccionado.idItem;
-      } else {
-        const response = await api.post(
-          "/api/precios",
-          { detalle: itemBusqueda, precio, idNivel, idMoneda },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        return response.data.data.idItem;
-      }
-    } catch (error) {
-      console.error("Error al crear/actualizar ítem:", error);
-      return null;
-    }
-  };
+
   const handleDetalleSeleccionado = (detalle) => {
     setDetalle(detalle.detalle);
     setIdDetalle(detalle.idDetalleP);
     setDetallesSugeridos([]);
   };
+
   const handleItemSeleccionado = (item) => {
     setItemSeleccionado(item);
     setItemBusqueda(item.detalle);
@@ -192,14 +188,33 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     setItemsSugeridos([]);
   };
 
-  // Agrega un nuevo detalle a la proforma
+  const eliminarDetalle = async (idDetalleProforma) => {
+    try {
+      const token = getToken();
+      await api.delete(`/api/detalleproforma/${idDetalleProforma}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      cargarDetallesProforma(); // Recarga los detalles después de eliminar
+    } catch (error) {
+      console.error("Error al eliminar el detalle:", error);
+      alert("No se pudo eliminar el detalle.");
+    }
+  };
+
   const agregarDetalle = async () => {
     try {
-      const detalleId = idDetalle || (await crearActualizarDetalle(detalle));
-      const itemId = await crearActualizarItem();
+      let itemId = itemSeleccionado?.idItem;
 
-      if (!detalleId || !itemId) {
-        alert("Error al crear/actualizar detalle o ítem.");
+      if (!itemId) {
+        const nuevoItem = await crearNuevoItem();
+        if (!nuevoItem) return;
+        itemId = nuevoItem.idItem;
+      }
+
+      const detalleId = idDetalle || (await crearActualizarDetalle(detalle));
+
+      if (!detalleId) {
+        alert("Error al crear/actualizar detalle.");
         return;
       }
 
@@ -214,6 +229,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
           iditem: itemId,
           descuento: descuentoCalculado,
           iddetallep: detalleId,
+          precio: parseFloat(precio).toFixed(2),
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -226,13 +242,6 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     }
   };
 
-  // Calcula el subtotal de los detalles
-  const calcularSubtotal = (detallesCalculados = detalles) => {
-    const total = detallesCalculados.reduce((acc, detalle) => acc + parseFloat(detalle.total || 0), 0);
-    setSubtotal(total.toFixed(2));
-  };
-
-  // Limpia los campos del formulario
   const limpiarCampos = () => {
     setDetalle("");
     setIdDetalle(null);
@@ -240,34 +249,15 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
     setItemSeleccionado(null);
     setPrecio("");
     setDescuento("");
-    setIdMoneda("");
   };
 
   useEffect(() => {
     cargarNiveles();
-    cargarMonedas();
+    cargarMoneda();
     cargarDetallesProforma();
   }, []);
-
   return (
     <div className="paso4-container">
-      {showMonedaModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Seleccione una Moneda</h3>
-            <select onChange={(e) => setIdMoneda(e.target.value)} value={idMoneda}>
-              <option value="">Seleccionar moneda</option>
-              {monedas.map((moneda) => (
-                <option key={moneda.idMoneda} value={moneda.idMoneda}>
-                  {moneda.nombre}
-                </option>
-              ))}
-            </select>
-            <button onClick={() => setShowMonedaModal(false)}>Confirmar</button>
-          </div>
-        </div>
-      )}
-
       <h2>Paso 4: Detalle de Proforma</h2>
       <div className="detalle-form">
         <label>Nivel:</label>
@@ -300,16 +290,16 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
           </ul>
         )}
 
-        <label>Ítem:</label>
-        <input
-          type="text"
-          value={itemBusqueda}
-          onChange={(e) => {
-            setItemBusqueda(e.target.value);
-            buscarItems(e.target.value);
-          }}
-          placeholder="Buscar ítem"
-        />
+<label>Ítem:</label>
+<input
+  type="text"
+  value={itemBusqueda}
+  onChange={(e) => {
+    setItemBusqueda(e.target.value); // Cambia solo el estado de itemBusqueda
+    buscarItems(e.target.value);    // Realiza la búsqueda basada en itemBusqueda
+  }}
+  placeholder="Buscar ítem"
+/>
         {itemsSugeridos.length > 0 && (
           <ul className="sugerencias-list">
             {itemsSugeridos.map((item) => (
@@ -324,7 +314,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
         <input
           type="number"
           value={precio}
-          onChange={(e) => setPrecio(e.target.value)}
+          onChange={(e) => setPrecio(e.target.value)} // Permite modificar el precio
           placeholder="Escribe el precio"
         />
 
@@ -353,7 +343,7 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
               <td>{detalle.item}</td>
               <td>{detalle.precio}</td>
               <td>{detalle.descuento}</td>
-              <td>{detalle.total}</td>
+              <td>{ parseFloat(detalle.precio-detalle.descuento).toFixed(2)}</td>
               <td>
                 <button onClick={() => eliminarDetalle(detalle.idDetalleProforma)}>Eliminar</button>
               </td>
