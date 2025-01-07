@@ -27,6 +27,8 @@ const BaseProformas = () => {
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [file, setFile] = useState(null);
+  const [detallesPlasticos, setDetallesPlasticos] = useState([]);
+  const [detallesMecanica, setDetallesMecanica] = useState([]);
 
   const getToken = () => localStorage.getItem("token");
 
@@ -76,6 +78,28 @@ const fetchFotos = async () => {
     console.error("Error al obtener fotos:", error);
     setFotos([]); // Limpia el estado en caso de error
     setFotosExistentes(false); // Garantiza que esté en falso si falla
+  }
+};
+const cargarDetallesPlasticos = async () => {
+  try {
+    const token = getToken();
+    const response = await api.get(`/api/detalleplastico/${idProforma}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDetallesPlasticos(response.data?.data || []);
+  } catch (error) {
+    console.error("Error al cargar detalles plásticos:", error);
+  }
+};
+const cargarDetallesMecanica = async () => {
+  try {
+    const token = getToken();
+    const response = await api.get(`/api/detallemecanica/proforma/${idProforma}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setDetallesMecanica(response.data.detallesMecanica || []);
+  } catch (error) {
+    console.error("Error al cargar detalles de mecánica:", error);
   }
 };
 
@@ -317,6 +341,9 @@ const handleFotosChange = (e) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setRepuestos(repuestosResponse.data?.repuestos?.[0]?.detalle );
+
+        
+        
       } catch (error) {
         console.error("Error al obtener los datos de la proforma:", error);
       } finally {
@@ -330,7 +357,10 @@ const handleFotosChange = (e) => {
     } else {
       setUser(JSON.parse(storedUser));
       fetchProformaData();
+      cargarDetallesPlasticos();
+      cargarDetallesMecanica();
       fetchFotos();
+      
     }
   }, [idProforma, navigate]);
 
@@ -546,10 +576,99 @@ const handleFotosChange = (e) => {
   Editar Detalles
 </button>
       </div>
+{/* Nueva sección para Detalles Plásticos */}
+<div className="proforma-section">
+  <h2>Detalles Plásticos</h2>
+  {detallesPlasticos && detallesPlasticos.length > 0 ? (
+    <table>
+      <thead>
+        <tr>
+          <th>Detalle</th>
+          <th>Ítem</th>
+          <th>Precio</th>
+          <th>Descuento</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {detallesPlasticos.map((detalle) => (
+          <tr key={detalle.idplastico}>
+            <td>{detalle.detalle}</td>
+            <td>{detalle.item}</td>
+            <td>{detalle.precio}</td>
+            <td>{detalle.descuento}</td>
+            <td>{(detalle.precio - detalle.descuento).toFixed(2)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p>No hay detalles plásticos asociados.</p>
+  )}
+  <button
+    className="btn-detalles-plasticos"
+    onClick={() =>
+      navigate(`/proformas/${idProforma}/${proformaData.vehiculo.nplaca}/detallesplasticos`, {
+        state: {
+          idSeguro: proformaData?.seguro?.idseguro || null,
+        },
+      })
+    }
+  >
+    Editar Plásticos
+  </button>
+</div>
 
+<div className="proforma-section">
+  <h2>Detalles Mecánica</h2>
+  {detallesMecanica.length > 0 ? (
+    <table>
+      <thead>
+        <tr>
+          <th>Detalle</th>
+          <th>Precio</th>
+          <th>Descuento</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {detallesMecanica.map((detalle) => (
+          <tr key={detalle.idmec}>
+            <td dangerouslySetInnerHTML={{ __html: detalle.detalle.replace(/\n/g, "<br />") }}></td>
+            <td>{detalle.precio}</td>
+            <td>{detalle.descuento}</td>
+            <td>{(detalle.precio - detalle.descuento).toFixed(2)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p>No hay detalles de mecánica asociados.</p>
+  )}
+  <button
+    className="btn-detalles-mecanica"
+    onClick={() =>
+      navigate(`/proformas/${idProforma}/${proformaData.vehiculo.nplaca}/detallemecanica`, {
+        state: {
+          idSeguro: proformaData?.seguro?.idseguro || null,
+        },
+      })
+    }
+  >
+    Editar Mecánica
+  </button>
+</div>
       <div className="proforma-section">
         <h2>Lista de Repuestos</h2>
-        <p>{repuestos}</p>
+        {repuestos ? (
+    <p
+      dangerouslySetInnerHTML={{
+        __html: repuestos.replace(/\n/g, "<br />"),
+      }}
+    ></p>
+  ) : (
+    <p>No se han añadido repuestos.</p>
+  )}
         <button
     className="btn-repuestos"
     onClick={() => navigate(`/proformas/${idProforma}/${proformaData.vehiculo.nplaca}/Repuestos`)}
@@ -689,12 +808,14 @@ const handleFotosChange = (e) => {
       <PdfCreateProforma
   proformaData={proformaData}
   detalles={detalles}
+  detallesPlasticos={detallesPlasticos} // Añadido para incluir detalles plásticos
+  detallesMecanica={detallesMecanica}
   repuestos={repuestos}
   marca={marca}
-  broker = {broker}
+  broker={broker}
   idProforma={idProforma}
-  fotos={fotos}// Ruta o base64 de la firma
-  logoURL={logoURL}  // Ruta o base64 del logo
+  fotos={fotos} // Ruta o base64 de la firma
+  logoURL={logoURL} // Ruta o base64 del logo
   tipotrabajo={proformaData.tipotrabajo?.tipoTrabajo} // Particular, Seguro, SeguroRC
   monedas={proformaData.seguro?.moneda?.nombre || "No definida"} // Moneda asociada
 />

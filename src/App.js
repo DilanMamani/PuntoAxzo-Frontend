@@ -19,6 +19,8 @@ import BaseProformas from "./pages/Proformas/ProformasEdits/BaseProformas";
 import Cliente from "./pages/Proformas/ProformasEdits/Cliente";
 import SeguroBroker from './pages/Proformas/ProformasEdits/SeguroBroker';
 import Detalles from './pages/Proformas/ProformasEdits/Detalles';
+import DetallesPlasticos from './pages/Proformas/ProformasEdits/DetallesPlasticos';
+import DetalleMecanica from './pages/Proformas/ProformasEdits/DetalleMecanica';
 import Repuestos from './pages/Proformas/ProformasEdits/Repuestos';
 import RepuestosAnexo from './pages/Proformas/ProformasEdits/Anexos/RepuestosAnexo';
 import Vehiculo from './pages/Proformas/ProformasEdits/Vehiculo';
@@ -67,6 +69,14 @@ const App = () => {
           path="/proformas/:idProforma/:nplaca/Detalles"
           element={<ProtectedRoute><Detalles /></ProtectedRoute>}
         />
+        <Route
+          path="/proformas/:idProforma/:nplaca/DetallesPlasticos"
+          element={<ProtectedRoute><DetallesPlasticos /></ProtectedRoute>}
+        />
+        <Route
+          path="/proformas/:idProforma/:nplaca/DetalleMecanica"
+          element={<ProtectedRoute><DetalleMecanica /></ProtectedRoute>}
+        />
         <Route path="/proformas/:idProforma/:nplaca/Repuestos" element={<ProtectedRoute><Repuestos /></ProtectedRoute>} />
         <Route path="/proformas/:idProforma/:nplaca/Vehiculo" element={<ProtectedRoute><Vehiculo /></ProtectedRoute>} />
         <Route
@@ -77,6 +87,7 @@ const App = () => {
           path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/detalles" 
           element={<ProtectedRoute><DetallesAnexo /></ProtectedRoute>} 
         />
+        
         {/* Nueva Ruta para Detalles del Anexo */}
         <Route 
           path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/repuestos" 

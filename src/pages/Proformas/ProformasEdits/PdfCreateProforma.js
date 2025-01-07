@@ -2,7 +2,7 @@ import React from "react";
 import html2pdf from "html2pdf.js";
 import logoPuntoAxzo from "../../../assets/Logo.png";
 
-const PdfCreateProforma = ({ proformaData, detalles,repuestos, marca,broker, idProforma,monedas }) => {
+const PdfCreateProforma = ({ proformaData, detalles,detallesPlasticos,detallesMecanica,repuestos, marca,broker, idProforma,monedas }) => {
   const obtenerMoneda = (proformaData) => {
     // Verificar si existe el idMoneda y asignar la moneda correspondiente
     const moneda = proformaData.seguro?.moneda?.idMoneda === 1 ? "Bs" : 
@@ -134,7 +134,7 @@ const datosSeguroBroker = `
 `;
 const detallesReparacion = `
   <div style="margin-bottom: 10px; font-size: 10px; font-family: Arial, sans-serif;">
-    <h3 style="margin: 0 0 5px 0; font-size: 12px; text-align: left; font-weight: bold;">DETALLES DE LA REPARACIÓN</h3>
+    <h3 style="margin: 0 0 5px 0; font-size: 12px; text-align: left; font-weight: bold;">DETALLES TRABAJOS DE CHAPERIA</h3>
     <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
       <thead>
         <tr>
@@ -180,6 +180,95 @@ const detallesReparacion = `
     </table>
   </div>
 `;
+const detallesPlasticosSection = detallesPlasticos?.length > 0
+  ? `
+  <div style="margin-bottom: 10px; font-size: 10px; font-family: Arial, sans-serif;">
+    <h3 style="margin: 0 0 5px 0; font-size: 12px; text-align: left; font-weight: bold;">REPARACIONES EN PLASTICO</h3>
+    <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+      <thead>
+        <tr>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
+          ${
+            detallesPlasticos.some((detalle) => detalle.descuento > 0)
+              ? `<style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
+          ${detallesPlasticos && detallesPlasticos.length > 0 
+            ? `Descuento ${
+                detallesPlasticos[0]?.precio && detallesPlasticos[0]?.descuento && detallesPlasticos[0]?.descuento > 0 
+                  ? Math.floor((detallesPlasticos[0].descuento / detallesPlasticos[0].precio) * 100) || 0 
+                  : 0
+              }%`
+            : "Descuento"}</th>
+            <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+              : ""
+          }
+        </tr>
+      </thead>
+      <tbody>
+        ${detallesPlasticos
+          .map(
+            (detalle, i) => `
+          <tr>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            ${
+              detallesPlasticos.some((d) => d.descuento > 0)
+                ? `<td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+                <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+                : ""
+            }
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  </div>
+  `
+  : "";
+  const detallesMecanicaSection = detallesMecanica?.length > 0
+  ? `
+  <div style="margin-bottom: 10px; font-size: 10px; font-family: Arial, sans-serif;">
+    <h3 style="margin: 0 0 5px 0; font-size: 12px; text-align: left; font-weight: bold;">REPARACIONES MECÁNICAS</h3>
+    <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+      <thead>
+        <tr>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
+          ${
+            detallesMecanica.some((detalle) => detalle.descuento > 0)
+              ? `
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Descuento</th>
+          <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+              : ""
+          }
+        </tr>
+      </thead>
+      <tbody>
+        ${detallesMecanica
+          .map(
+            (detalle, i) => `
+          <tr>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000 ;white-space: pre-line;"">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            ${
+              detallesMecanica.some((d) => d.descuento > 0)
+                ? `
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+                : ""
+            }
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  </div>
+  `
+  : "";
 const detalleRepuestos = `
   <div style="margin-top: 10px; font-size: 10px; font-family: Arial, sans-serif;">
     <h3 style="margin: 0 0 5px 0; font-size: 12px; text-align: left; font-weight: bold;">DETALLE DE REPUESTOS</h3>
@@ -215,7 +304,7 @@ const resumenFinanciero = `
     <div style="text-align: left; margin-top: 10px;">
       <p style="margin: 0;"><strong>Son:</strong> ${
         (proformaData.totalliteral || "Cero").replace(/\bCien\b/gi, "Ciento")
-      } ${monedas}</p>
+      }. ${monedas}</p>
     </div>
   </div>
 `;
@@ -230,7 +319,7 @@ const notaValidez = `
 </div>
 `;
     // Agregar contenido al contenedor
-    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detalleRepuestos+ resumenFinanciero+notaValidez;
+    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+detalleRepuestos+ resumenFinanciero+notaValidez;
 
     // Opciones para html2pdf.js
 const options = {
