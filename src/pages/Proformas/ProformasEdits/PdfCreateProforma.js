@@ -192,7 +192,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
           <th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
           ${
             detallesPlasticos.some((detalle) => detalle.descuento > 0)
-              ? `<style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
+              ? `<th style="border: 0.5px 0;solid #000; padding: 5px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
           ${detallesPlasticos && detallesPlasticos.length > 0 
             ? `Descuento ${
                 detallesPlasticos[0]?.precio && detallesPlasticos[0]?.descuento && detallesPlasticos[0]?.descuento > 0 
