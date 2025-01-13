@@ -134,9 +134,9 @@ const datosSeguroBroker = `
   }
 `;
 const detallesReparacion = `
-  <div style="margin-bottom: 3px; font-size: 10px; font-family: Arial, sans-serif; page-break-inside: avoid;">
+  <div style="margin-bottom: 3px; font-size: 10px; font-family: Arial, sans-serif; ">
     <h3 style="margin: 1px; font-size: 12px; text-align: left; font-weight: bold;">DETALLES TRABAJOS DE CHAPERIA</h3>
-    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0 page-break-inside: avoid;">
       <thead>
         <tr>
           <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
@@ -162,7 +162,7 @@ const detallesReparacion = `
         ${detalles
           .map(
             (detalle, i) => `
-          <tr>
+          <tr style="page-break-inside: avoid;">
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
@@ -183,9 +183,9 @@ const detallesReparacion = `
 `;
 const detallesPlasticosSection = detallesPlasticos?.length > 0
   ? `
-  <div style="margin-bottom: 3px; font-size: 10px; font-family: Arial, sans-serif; page-break-inside: avoid;">
+  <div style="margin-bottom: 3px; font-size: 10px; font-family: Arial, sans-serif; ">
     <h3 style="margin: 1px 0; font-size: 12px; text-align: left; font-weight: bold;">REPARACIONES EN PLASTICO</h3>
-    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;page-break-inside: avoid;">
       <thead>
         <tr>
           <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
@@ -210,7 +210,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
         ${detallesPlasticos
           .map(
             (detalle, i) => `
-          <tr>
+          <tr style="page-break-inside: avoid;">
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
@@ -233,7 +233,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
   ? `
   <div style="margin-bottom: 3px; font-size: 10px; font-family: Arial, sans-serif; page-break-inside: avoid;">
     <h3 style="margin: 1px; font-size: 12px; text-align: left; font-weight: bold;">REPARACIONES MECÁNICAS</h3>
-    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;page-break-inside: avoid;">
       <thead>
         <tr>
           <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
@@ -251,7 +251,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
         ${detallesMecanica
           .map(
             (detalle, i) => `
-          <tr>
+          <tr style="page-break-inside: avoid;">
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000 ;white-space: pre-line;"">${detalle.detalle || "N/A"}</td>
             <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
             ${
@@ -271,7 +271,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
   `
   : "";
 const detalleRepuestos = `
-  <div style="margin-top: 5px; font-size: 10px; font-family: Arial, sans-serif;">
+  <div style="margin-top: 5px; font-size: 10px; font-family: Arial, sans-serif; page-break-inside: avoid;">
     <h3 style="margin: 2px 0; font-size: 12px; text-align: left; font-weight: bold;">DETALLE DE REPUESTOS</h3>
     ${
       repuestos && repuestos.trim() !== "No se han añadido repuestos."
@@ -328,7 +328,7 @@ const notaValidez = `
 </div>
 `;
     // Agregar contenido al contenedor
-    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+detalleRepuestos+ resumenFinanciero+firmaSection+notaValidez;
+    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+ detallesReparacion+detalleRepuestos+ resumenFinanciero+firmaSection+notaValidez;
 
     // Opciones para html2pdf.js
 const options = {
