@@ -139,12 +139,12 @@ const detallesReparacion = `
     <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
       <thead>
         <tr>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
           ${
             detalles.some((detalle) => detalle.descuento > 0)
-              ? `<th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
+              ? `<th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
           ${detalles && detalles.length > 0 
             ? `Descuento ${
                 detalles[0]?.precio && detalles[0]?.descuento && detalles[0]?.descuento > 0 
@@ -152,7 +152,7 @@ const detallesReparacion = `
                   : 0
               }%`
             : "Descuento"}</th>
-            <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+            <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
               : ""
           }
           
@@ -163,13 +163,13 @@ const detallesReparacion = `
           .map(
             (detalle, i) => `
           <tr>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
             ${
               detalles.some((d) => d.descuento > 0)
-                ? `<td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
-                <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+                ? `<td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+                <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
                 : ""
             }
             
@@ -188,12 +188,12 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
     <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
       <thead>
         <tr>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Ítem</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
           ${
             detallesPlasticos.some((detalle) => detalle.descuento > 0)
-              ? `<th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
+              ? `<th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">
           ${detallesPlasticos && detallesPlasticos.length > 0 
             ? `Descuento ${
                 detallesPlasticos[0]?.precio && detallesPlasticos[0]?.descuento && detallesPlasticos[0]?.descuento > 0 
@@ -201,7 +201,7 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
                   : 0
               }%`
             : "Descuento"}</th>
-            <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+            <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
               : ""
           }
         </tr>
@@ -211,13 +211,13 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
           .map(
             (detalle, i) => `
           <tr>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.item || i + 1}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
             ${
               detallesPlasticos.some((d) => d.descuento > 0)
-                ? `<td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
-                <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+                ? `<td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+                <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
                 : ""
             }
           </tr>
@@ -236,13 +236,13 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
     <table style="width: 100%; border-collapse: collapse; font-size: 10px; border-spacing: 0;">
       <thead>
         <tr>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Detalle</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Precio</th>
           ${
             detallesMecanica.some((detalle) => detalle.descuento > 0)
               ? `
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Descuento</th>
-          <th style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Descuento</th>
+          <th style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left; font-weight: bold;background-color: #fff; color: #000;">Total</th>`
               : ""
           }
         </tr>
@@ -252,13 +252,13 @@ const detallesPlasticosSection = detallesPlasticos?.length > 0
           .map(
             (detalle, i) => `
           <tr>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000 ;white-space: pre-line;"">${detalle.detalle || "N/A"}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000 ;white-space: pre-line;"">${detalle.detalle || "N/A"}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.precio || "0.00"} ${moneda}</td>
             ${
               detallesMecanica.some((d) => d.descuento > 0)
                 ? `
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
-            <td style="border: 0.5px 0;solid #000; padding: 3px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${detalle.descuento || "0.00"} ${moneda}</td>
+            <td style="border: 0.5px 0;solid #000; padding: 4px;font-size: 10px; text-align: left;background-color: #fff; color: #000;">${(detalle.precio - (detalle.descuento || 0)).toFixed(2)} ${moneda}</td>`
                 : ""
             }
           </tr>
