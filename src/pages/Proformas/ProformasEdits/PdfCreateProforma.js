@@ -282,7 +282,7 @@ const detalleRepuestos = `
 `;
 
 const resumenFinanciero = `
-  <div style="margin-top: 10px; font-size: 10px; font-family: Arial, sans-serif;">
+  <div style="margin-top: 10px; font-size: 10px; font-family: Arial, sans-serif; page-break-inside: avoid;" >
     <!-- Totales alineados a la derecha -->
     <div style="text-align: right; margin-bottom: 10px;">
       ${
@@ -310,7 +310,7 @@ const resumenFinanciero = `
   </div>
 `;
 const firmaSection = `
-<div style="display: flex; justify-content: flex-start; align-items: center; margin-top: 1px;">
+<div style="display: flex; justify-content: flex-start; align-items: center; margin-top: 1px; page-break-inside: avoid;">
   <div style="text-align: left;">
     <img src="${firmaPuntoAxzo}" alt="Firma" style="width: 200px;" /> <!-- Tamaño ajustado -->
   </div>
@@ -318,7 +318,7 @@ const firmaSection = `
 `;
 
 const notaValidez = `
-<div style="margin-top: 20px; font-size: 11px; text-align: left; font-family: Arial, sans-serif;">
+<div style="margin-top: 20px; font-size: 11px; text-align: left; font-family: Arial, sans-serif; page-break-inside: avoid;">
   <p style="margin: 0;">
     <strong>Obs. Esta proforma evalúa daños visibles.</strong> 
   </p>
