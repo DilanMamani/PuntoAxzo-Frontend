@@ -328,7 +328,7 @@ const notaValidez = `
 </div>
 `;
     // Agregar contenido al contenedor
-    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+ detallesReparacion+detalleRepuestos+ resumenFinanciero+firmaSection+notaValidez;
+    pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+detalleRepuestos+ resumenFinanciero+firmaSection+notaValidez;
 
     // Opciones para html2pdf.js
 const options = {
