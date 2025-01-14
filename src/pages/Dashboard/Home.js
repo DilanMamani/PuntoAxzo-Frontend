@@ -58,6 +58,30 @@ const Home = () => {
   const fetchRecentProformas = async () => {
     try {
       const token = localStorage.getItem('token');
+      if (!token) {
+        Swal.fire('Error', 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.', 'error');
+        navigate('/login');
+        return;
+      }
+  
+      const isTokenExpired = () => {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const currentTime = Math.floor(Date.now() / 1000);
+          return payload.exp && currentTime > payload.exp;
+        } catch (e) {
+          return true;
+        }
+      };
+  
+      if (isTokenExpired()) {
+        Swal.fire('Error', 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.', 'error');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+        return;
+      }
+  
       const response = await api.get('/api/proformasRec', {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -67,7 +91,6 @@ const Home = () => {
       Swal.fire('Error', 'No se pudieron cargar los últimos proformas.', 'error');
     }
   };
-
   return (
     <div className="home-container">
       {/* Barra de navegación superior */}
