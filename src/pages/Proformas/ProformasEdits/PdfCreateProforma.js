@@ -457,7 +457,7 @@ const notaValidez = `
   return (
     <div>
     <button onClick={handleDownloadPDF}>Descargar PDF</button>
-      <button onClick={() => setIsModalOpen(true)}>Enviar PDF</button>
+      <button onClick={() => setIsModalOpen(true)}>Enviar a Correos</button>
 
       {isModalOpen && (
         <div className="modal-overlay">
