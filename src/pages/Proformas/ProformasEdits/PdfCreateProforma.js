@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import html2pdf from "html2pdf.js";
+import Swal from "sweetalert2";
 import logoPuntoAxzo from "../../../assets/Logo.png";
-import firmaPuntoAxzo from "../../../assets/Firma.png"; // Importamos la firma
+import firmaPuntoAxzo from "../../../assets/Firma.png";
+import api from "../../../services/axiosConfig";
 
-const PdfCreateProforma = ({ proformaData, detalles,detallesPlasticos,detallesMecanica,repuestos, marca,broker, idProforma,monedas }) => {
-  const obtenerMoneda = (proformaData) => {
-    // Verificar si existe el idMoneda y asignar la moneda correspondiente
-    const moneda = proformaData.seguro?.moneda?.idMoneda === 1 ? "Bs" : 
-                   proformaData.seguro?.moneda?.idMoneda === 2 ? "$US" : "Moneda no especificada";
-    
-    return moneda;
+const PdfCreateProforma = ({ proformaData, detalles, detallesPlasticos, detallesMecanica, repuestos, marca, broker, idProforma, monedas, fotos }) => {
+  const [selectedRecipients, setSelectedRecipients] = useState({
+    cliente: true,
+    inspectorSeguro: true,
+    inspectorBroker: true,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const obtenerMoneda = () => {
+    return proformaData.seguro?.moneda?.idMoneda === 1
+      ? "Bs"
+      : proformaData.seguro?.moneda?.idMoneda === 2
+      ? "$US"
+      : "Moneda no especificada";
   };
-  
-  // Ejemplo de uso
-  const moneda = obtenerMoneda(proformaData);
-  console.log(moneda); // Imprime "Bs" o "$US" según el valor de idMoneda
-  const generatePDF = () => {
-    // Crear un contenedor HTML dinámico para el PDF
+
+  // Función para generar contenido del PDF
+  const generatePDFContent = () => {
     const obtenerMoneda = (proformaData) => {
       // Verificar si existe el idMoneda y asignar la moneda correspondiente
       const moneda = proformaData.seguro?.moneda?.idMoneda === 1 ? "Bs" : 
@@ -329,30 +336,153 @@ const notaValidez = `
 `;
     // Agregar contenido al contenedor
     pdfContent.innerHTML = header + datosClienteVehiculo + datosSeguroBroker+detallesReparacion + detallesPlasticosSection+detallesMecanicaSection+detalleRepuestos+ resumenFinanciero+firmaSection+notaValidez;
+    return pdfContent;
+  };
+  const generatePDFBlob = async () => {
+    const pdfContent = generatePDFContent();
+    const options = {
+      margin: 0.5,
+      filename: `Proforma-${idProforma}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+    return html2pdf().set(options).from(pdfContent).output("blob");
+  };
+  // Función para descargar PDF
+  const handleDownloadPDF = async () => {
+    const pdfContent = generatePDFContent();
 
-    // Opciones para html2pdf.js
-const options = {
-  margin: 0.5,
-  filename: 
-    proformaData.tipotrabajo?.tipoTrabajo === "Particular"
+    const options = {
+      margin: 0.5,
+      filename: proformaData.tipotrabajo?.tipoTrabajo === "Particular"
       ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
       : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`,
-  image: { type: "jpeg", quality: 0.98 },
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-};
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
 
-
-    // Generar el PDF
     html2pdf().set(options).from(pdfContent).save();
+  };
+  const handleSendEmail = async () => {
+    setIsLoading(true);
+  
+    try {
+      // Verificar que los destinatarios sean válidos
+      const emailRecipients = [
+        proformaData.inspectorseguro?.mail,
+        proformaData.inspectorbroker?.mail,
+        proformaData.cliente?.mail,
+      ].filter((email) => email && /\S+@\S+\.\S+/.test(email));
+  
+      if (emailRecipients.length === 0) {
+        Swal.fire("Error", "No hay correos válidos para enviar el PDF.", "error");
+        setIsLoading(false);
+        return;
+      }
+  
+      // Construir el asunto del correo
+      const subject = `PROFORMA ${proformaData.numerop || "N/A"}/${proformaData.anio || "N/A"} // ${
+        proformaData.cliente?.nombre || "NOMBRE ASEGURADO"
+      } // ${proformaData.vehiculo?.modelo?.tipoVehiculo?.tipo || "TIPO VEHÍCULO"} ${
+        proformaData.vehiculo?.modelo?.nombre || "MODELO"
+      } // ${proformaData.nplaca || "PLACA"} // ${String(idProforma).padStart(7, "0")}`;
+  
+      // Texto alternativo para el correo
+      const text = `Adjunto el archivo solicitado. Proforma relacionada con el vehículo de placa ${proformaData.nplaca || "N/A"}.`;
+  
+      // Preparar datos del vehículo
+      
+      const vehicleData = {
+        asegurado: proformaData.cliente?.nombre || "N/A",
+        placa: proformaData.nplaca || "N/A",
+        marca: marca || "N/A",
+        modelo: proformaData.vehiculo?.modelo?.nombre || "N/A",
+        tipo: proformaData.vehiculo?.modelo?.tipoVehiculo?.tipo || "N/A",
+        color: proformaData.vehiculo?.color || "N/A",
+  
+      };
+      console.log("Datos del vehículo enviados:", vehicleData);
+      // Adjuntar el archivo PDF y las imágenes
+      const formData = new FormData();
+  
+      // Agregar archivo PDF
+      const pdfBlob = await generatePDFBlob();
+      if (!pdfBlob) throw new Error("Error al generar el archivo PDF.");
+      formData.append("file", pdfBlob, proformaData.tipotrabajo?.tipoTrabajo === "Particular"
+        ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
+        : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`);
+  
+      // Agregar imágenes adjuntas
+      fotos.forEach((foto, index) => {
+        if (foto?.foto.startsWith("data:image")) {
+          const fotoBlob = base64ToBlob(foto.foto);
+          formData.append("images", fotoBlob, `photo-${index + 1}.jpg`);
+        }
+      });
+  
+      // Agregar los destinatarios, asunto, texto y datos del vehículo al FormData
+      formData.append("to", JSON.stringify(emailRecipients));
+      formData.append("subject", subject);
+      formData.append("text", text);
+      formData.append("data", JSON.stringify(vehicleData));
+  
+      // Llamada al backend para enviar el correo
+      const response = await api.post("/api/send-email", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+  
+      if (response.status === 200) {
+        Swal.fire("Éxito", "El correo se envió correctamente.", "success");
+      } else {
+        throw new Error("Error al enviar el correo.");
+      }
+    } catch (error) {
+      console.error("Error al enviar el correo:", error.message);
+      Swal.fire("Error", "Hubo un problema al enviar el correo.", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const base64ToBlob = (base64String) => {
+    const byteCharacters = atob(base64String.split(",")[1]); // Elimina el encabezado base64
+    const byteArrays = [];
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArrays.push(byteCharacters.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(byteArrays)], { type: "image/jpeg" });
   };
 
   return (
-    <>
-      <button onClick={generatePDF} className="btn-generate-pdf">
-        Descargar Proforma
-      </button>
-    </>
+    <div>
+    <button onClick={handleDownloadPDF}>Descargar PDF</button>
+      <button onClick={() => setIsModalOpen(true)}>Enviar PDF</button>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Seleccionar Destinatarios</h2>
+            {["cliente", "inspectorSeguro", "inspectorBroker"].map((key) => (
+              <label key={key}>
+                <input
+                  type="checkbox"
+                  checked={selectedRecipients[key]}
+                  onChange={() => setSelectedRecipients((prev) => ({ ...prev, [key]: !prev[key] }))}
+                />
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </label>
+            ))}
+            <div className="modal-actions">
+              <button disabled={isLoading} onClick={handleSendEmail}>
+                {isLoading ? "Enviando..." : "Enviar Correo"}
+              </button>
+              <button onClick={() => setIsModalOpen(false)}>Cerrar</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
