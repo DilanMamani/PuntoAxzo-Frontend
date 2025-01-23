@@ -33,8 +33,6 @@ api.interceptors.request.use(
       }
       // Adjuntar el token al header Authorization
       config.headers.Authorization = `Bearer ${token}`;
-    } else {
-      console.warn("No se encontró token.");
     }
     return config;
   },
@@ -54,11 +52,13 @@ api.interceptors.response.use(
         localStorage.removeItem("authToken");
         alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
         window.location.href = "/login"; // Redirigir al login
-      } else if (error.response.status === 403) {
+      } else{ 
+        if (error.response.status === 403) {
         console.warn("Acceso prohibido. Redirigiendo al login...");
         alert("No tienes permiso para acceder a este recurso.");
         window.location.href = "/login";
       }
+    }
     }
     return Promise.reject(error);
   }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../../services/axiosConfig";
+import EditarDetalleModal from "./EditarDetalleModal";
 import "./Paso4.css";
 
 const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
@@ -18,6 +19,8 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
   const [monedas, setMonedas] = useState([]);
   const [idMoneda, setIdMoneda] = useState("");
   const [showMonedaModal, setShowMonedaModal] = useState(false);
+  const [editarDetalleModalOpen, setEditarDetalleModalOpen] = useState(false);
+const [detalleSeleccionado, setDetalleSeleccionado] = useState(null);
 
   const getToken = () => localStorage.getItem("token");
 
@@ -120,7 +123,10 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
       alert("No se pudo cargar la moneda asociada al seguro.");
     }
   };
-
+  const abrirEditarDetalleModal = (detalle) => {
+    setDetalleSeleccionado(detalle);
+    setEditarDetalleModalOpen(true);
+  };
   const crearNuevoItem = async () => {
       console.log(itemBusqueda, idNivel, idMoneda, parseFloat(precio).toFixed(2));
       console.log("Ítem buscado:", itemBusqueda); // Confirmar que se usa el estado correcto
@@ -258,6 +264,14 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
   }, []);
   return (
     <div className="paso4-container">
+      {editarDetalleModalOpen && (
+  <EditarDetalleModal
+  detalle={detalleSeleccionado}
+  idNivel={idNivel} // Pasar el idNivel al modal
+  onClose={() => setEditarDetalleModalOpen(false)}
+  onSave={cargarDetallesProforma} // Recarga la lista de detalles después de guardar
+/>
+)}
       <h2>Paso 4: Detalle de Proforma</h2>
       <div className="detalle-form">
         <label>Nivel:</label>
@@ -271,44 +285,69 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
         </select>
 
         <label>Detalle:</label>
-        <input
-          type="text"
-          value={detalle}
-          onChange={(e) => {
-            setDetalle(e.target.value);
-            buscarDetalles(e.target.value);
-          }}
-          placeholder="Escribe un detalle"
-        />
-        {detallesSugeridos.length > 0 && (
-          <ul className="sugerencias-list">
-            {detallesSugeridos.map((detalle) => (
-              <li key={detalle.idDetalleP} onClick={() => handleDetalleSeleccionado(detalle)}>
-                {detalle.detalle} (ID: {detalle.idDetalleP})
-              </li>
-            ))}
-          </ul>
-        )}
+<input
+  type="text"
+  value={detalle}
+  onChange={(e) => {
+    const nuevoDetalle = e.target.value;
+    setDetalle(nuevoDetalle);
+    // Deseleccionar si el texto cambia
+    if (nuevoDetalle !== detalle) {
+      setIdDetalle(null);
+    }
+    buscarDetalles(nuevoDetalle);
+  }}
+  placeholder="Escribe un detalle"
+/>
+{detallesSugeridos.length > 0 && (
+  <ul className="sugerencias-list">
+    {detallesSugeridos.map((detalle) => (
+      <li
+        key={detalle.idDetalleP}
+        onClick={() => {
+          setDetalle(detalle.detalle);
+          setIdDetalle(detalle.idDetalleP);
+          setDetallesSugeridos([]);
+        }}
+      >
+        {detalle.detalle} (ID: {detalle.idDetalleP})
+      </li>
+    ))}
+  </ul>
+)}
 
 <label>Ítem:</label>
 <input
   type="text"
   value={itemBusqueda}
   onChange={(e) => {
-    setItemBusqueda(e.target.value); // Cambia solo el estado de itemBusqueda
-    buscarItems(e.target.value);    // Realiza la búsqueda basada en itemBusqueda
+    const nuevoItem = e.target.value;
+    setItemBusqueda(nuevoItem);
+    // Deseleccionar si el texto cambia
+    if (nuevoItem !== (itemSeleccionado?.detalle || "")) {
+      setItemSeleccionado(null);
+    }
+    buscarItems(nuevoItem);
   }}
   placeholder="Buscar ítem"
 />
-        {itemsSugeridos.length > 0 && (
-          <ul className="sugerencias-list">
-            {itemsSugeridos.map((item) => (
-              <li key={item.idItem} onClick={() => handleItemSeleccionado(item)}>
-                {item.detalle} (ID: {item.idItem}) - {item.precio}
-              </li>
-            ))}
-          </ul>
-        )}
+{itemsSugeridos.length > 0 && (
+  <ul className="sugerencias-list">
+    {itemsSugeridos.map((item) => (
+      <li
+        key={item.idItem}
+        onClick={() => {
+          setItemBusqueda(item.detalle);
+          setItemSeleccionado(item);
+          setPrecio(item.precio); // Actualizar el precio con el ítem seleccionado
+          setItemsSugeridos([]);
+        }}
+      >
+        {item.detalle} (ID: {item.idItem}) - {item.precio}
+      </li>
+    ))}
+  </ul>
+)}
 
         <label>Precio:</label>
         <input
@@ -345,8 +384,9 @@ const Paso4 = ({ data, setData, retrocederPaso, avanzarPaso }) => {
               <td>{detalle.descuento}</td>
               <td>{ parseFloat(detalle.precio-detalle.descuento).toFixed(2)}</td>
               <td>
-                <button onClick={() => eliminarDetalle(detalle.idDetalleProforma)}>Eliminar</button>
-              </td>
+  <button onClick={() => abrirEditarDetalleModal(detalle)}>Editar</button>
+  <button onClick={() => eliminarDetalle(detalle.idDetalleProforma)}>Eliminar</button>
+</td>
             </tr>
           ))}
         </tbody>
