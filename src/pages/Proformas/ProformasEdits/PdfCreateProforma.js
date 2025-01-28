@@ -68,7 +68,7 @@ const datosClienteVehiculo = `
           ? `
             <h3 style="margin: 0 0 3px 0; font-size: 12px; text-align: left; font-weight: bold;">DATOS DEL CLIENTE</h3>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <p style="margin: 0; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
+              <p style="margin: 0;font-size: 12px; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
               <p style="margin: 0; flex: 1; text-align: right;"><strong>Teléfono:</strong> ${proformaData.cliente?.telefono || "N/A"}</p>
             </div>
             <p style="margin: 2px 0 0 0;"><strong>Correo:</strong> ${proformaData.cliente?.mail || "N/A"}</p>
@@ -77,7 +77,7 @@ const datosClienteVehiculo = `
           ? `
             <h3 style="margin: 0 0 3px 0; font-size: 12px; text-align: left; font-weight: bold;">DATOS ASEGURADO</h3>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <p style="margin: 0; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
+              <p style="margin: 0;font-size: 12px; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
               <p style="margin: 0; flex: 1; text-align: right;"><strong>Teléfono:</strong> ${proformaData.cliente?.telefono || "N/A"}</p>
             </div>
             <p style="margin: 2px 0 0 0;"><strong>Correo:</strong> ${proformaData.cliente?.mail || "N/A"}</p>
@@ -85,13 +85,13 @@ const datosClienteVehiculo = `
           : `
             <h3 style="margin: 0 0 3px 0; font-size: 12px; text-align: left; font-weight: bold;">DATOS RC</h3>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <p style="margin: 0; flex: 1;"><strong>Nombre:</strong> ${proformaData.clienteRC?.nombre || "N/A"}</p>
+              <p style="margin: 0; font-size: 12px;flex: 1;"><strong>Nombre:</strong> ${proformaData.clienteRC?.nombre || "N/A"}</p>
               <p style="margin: 0; flex: 1; text-align: right;"><strong>Teléfono:</strong> ${proformaData.clienteRC?.telefono || "N/A"}</p>
             </div>
             <p style="margin: 2px 0 0 0;"><strong>Correo:</strong> ${proformaData.clienteRC?.mail || "N/A"}</p>
             <h3 style="margin: 5px 0 3px 0; font-size: 12px; text-align: left; font-weight: bold;">DATOS ASEGURADO</h3>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <p style="margin: 0; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
+              <p style="margin: 0;font-size: 12px; flex: 1;"><strong>Nombre:</strong> ${proformaData.cliente?.nombre || "N/A"}</p>
               <p style="margin: 0; flex: 1; text-align: right;"><strong>Teléfono:</strong> ${proformaData.cliente?.telefono || "N/A"}</p>
             </div>
             <p style="margin: 2px 0 0 0;"><strong>Correo:</strong> ${proformaData.cliente?.mail || "N/A"}</p>
@@ -102,7 +102,7 @@ const datosClienteVehiculo = `
     <!-- Datos Vehículo -->
     <div style="flex: 1; padding-left: 8px;">
       <h3 style="margin: 0 0 3px 0; font-size: 12px; text-align: left; font-weight: bold;">DATOS DEL VEHÍCULO</h3>
-      <p style="margin: 0;"><strong>Placa:</strong> ${proformaData.nplaca || "N/A"}</p>
+      <p style="margin: 0;font-size: 12px;"><strong>Placa:</strong> ${proformaData.nplaca || "N/A"}</p>
       <p style="margin: 0;"><strong>Color:</strong> ${proformaData?.vehiculo?.color || "N/A"}</p>
       <p style="margin: 0;"><strong>Tipo:</strong> ${proformaData?.vehiculo?.modelo?.tipoVehiculo?.tipo || "N/A"}</p>
       <p style="margin: 0;"><strong>Marca:</strong> ${marca || "N/A"}</p>
@@ -283,7 +283,7 @@ const detalleRepuestos = `
     ${
       repuestos && repuestos.trim() !== "No se han añadido repuestos."
         ? `<p style="margin: 0; white-space: pre-line;">${repuestos}</p>`
-        : `<p style="margin: 0;">Por Verificar</p>`
+        : `<p style="margin: 0 ;font-size: 12px;">Por Verificar</p>`
     }
   </div>
 `;
