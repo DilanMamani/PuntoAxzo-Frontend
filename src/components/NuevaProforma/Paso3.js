@@ -56,9 +56,8 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
     }
   };
 
-  // Manejar cambio en la placa
   const handlePlacaChange = (e) => {
-    const value = e.target.value;
+    const value = limpiarPlaca(e.target.value); // 🔹 Limpia la placa al escribir
     setNPlaca(value);
     if (value.length > 2) buscarVehiculoPorPlaca(value);
     else setVehiculos([]);
@@ -107,12 +106,12 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
   };
 
   const limpiarPlaca = (placa) => {
-    return placa.replace(/-/g, "").toUpperCase().trim(); // 🔹 Elimina guiones y convierte a mayúsculas
+    return placa.replace(/-/g, "").toUpperCase().trim(); // 🔹 Elimina guiones y espacios extra
   };
   
   const handleNext = async () => {
-    let placaLimpia = limpiarPlaca(nPlaca); // 🔹 Limpiar la placa
-  
+    let placaLimpia = limpiarPlaca(nPlaca); // 🔹 Limpiar la placa antes de enviar
+    
     console.log("Datos actuales antes de avanzar:", {
       nPlaca: placaLimpia, // 🔹 Usar la placa limpia
       idCliente: data.idCliente,
@@ -144,13 +143,13 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
           console.log("Creando nuevo vehículo con placa:", placaLimpia);
           await api.post(
             "/api/vehiculos",
-            { nPlaca: placaLimpia, idModelo: modelo, color }, // 🔹 Enviar placa limpia
+            { nPlaca: placaLimpia, idModelo: modelo, color }, // 🔹 Enviar placa corregida
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } else {
           console.log("Actualizando vehículo existente con placa:", placaLimpia);
           await api.put(
-            `/api/vehiculos/${placaLimpia}`, // 🔹 Enviar placa limpia
+            `/api/vehiculos/${placaLimpia}`, // 🔹 Enviar placa corregida
             { idModelo: modelo, color },
             { headers: { Authorization: `Bearer ${token}` } }
           );
