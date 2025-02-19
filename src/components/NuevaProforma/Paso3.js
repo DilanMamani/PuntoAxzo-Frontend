@@ -46,7 +46,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
   const buscarVehiculoPorPlaca = async (placa) => {
     try {
       const token = getToken();
-      const response = await api.get(`/api/vehiculos/buscar?nPlaca=${placa}`, {
+      const response = await api.get(`/api/vehiculos/${placa.trim()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setVehiculos(response.data.data || []);
@@ -106,10 +106,15 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
     }
   };
 
-  // Procesar datos y avanzar
+  const limpiarPlaca = (placa) => {
+    return placa.replace(/-/g, "").toUpperCase().trim(); // 🔹 Elimina guiones y convierte a mayúsculas
+  };
+  
   const handleNext = async () => {
+    let placaLimpia = limpiarPlaca(nPlaca); // 🔹 Limpiar la placa
+  
     console.log("Datos actuales antes de avanzar:", {
-      nPlaca,
+      nPlaca: placaLimpia, // 🔹 Usar la placa limpia
       idCliente: data.idCliente,
       idClienteRC: data.idClienteRC,
       idTrabajo: data.idTrabajo,
@@ -129,32 +134,36 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
       }
   
       // Validar campos obligatorios
-      if (!nPlaca || !modelo || !color) {
+      if (!placaLimpia || !modelo || !color) {
         alert("Por favor, completa todos los campos del vehículo.");
         return;
       }
   
-      // Crear o actualizar vehículo
-      if (!vehiculoSeleccionado) {
-        console.log("Creando nuevo vehículo");
-        await api.post(
-          "/api/vehiculos",
-          { nPlaca, idModelo: modelo, color },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      } else {
-        console.log("Actualizando vehículo existente");
-        await api.put(
-          `/api/vehiculos/${nPlaca.trim()}`,  // <--- Elimina espacios extras
-          { idModelo: modelo, color },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+      try {
+        if (!vehiculoSeleccionado) {
+          console.log("Creando nuevo vehículo con placa:", placaLimpia);
+          await api.post(
+            "/api/vehiculos",
+            { nPlaca: placaLimpia, idModelo: modelo, color }, // 🔹 Enviar placa limpia
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+        } else {
+          console.log("Actualizando vehículo existente con placa:", placaLimpia);
+          await api.put(
+            `/api/vehiculos/${placaLimpia}`, // 🔹 Enviar placa limpia
+            { idModelo: modelo, color },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+        }
+      } catch (error) {
+        console.error("Error al guardar el vehículo:", error);
+        alert("No se pudo guardar el vehículo. Verifica los datos y vuelve a intentarlo.");
       }
   
       // Preparar payload de la proforma
       const usuarioLogueado = JSON.parse(localStorage.getItem("user"));
       const proformaPayload = {
-        nplaca: nPlaca,
+        nplaca: placaLimpia, // 🔹 Guardar placa limpia
         idCliente: data.idCliente,
         idUsuario: usuarioLogueado?.idUsuario,
         idTrabajo: data.tipoTrabajo,
@@ -183,7 +192,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
       setData((prevData) => ({
         ...prevData,
         idProforma: idProformaCreada,
-        vehiculo: { ...prevData.vehiculo, nPlaca }, // Guardar placa
+        vehiculo: { ...prevData.vehiculo, nPlaca: placaLimpia }, // 🔹 Guardar placa limpia
       }));
   
       avanzarPaso();
