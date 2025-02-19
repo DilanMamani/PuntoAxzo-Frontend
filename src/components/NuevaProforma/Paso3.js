@@ -57,7 +57,13 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
   };
 
   const handlePlacaChange = (e) => {
-    const value = limpiarPlaca(e.target.value); // 🔹 Limpia la placa al escribir
+    let value = limpiarPlaca(e.target.value);
+  
+    // 🔹 Limitar a 7 caracteres
+    if (value.length > 7) {
+      value = value.slice(0, 7);
+    }
+  
     setNPlaca(value);
     if (value.length > 2) buscarVehiculoPorPlaca(value);
     else setVehiculos([]);
@@ -106,7 +112,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
   };
 
   const limpiarPlaca = (placa) => {
-    return placa.replace(/[\s-]/g, "").toUpperCase();
+    return placa.replace(/[^a-zA-Z0-9]/g, "").toUpperCase(); // 🔹 Solo letras y números, en mayúsculas
   };
   
   const handleNext = async () => {
