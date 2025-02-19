@@ -106,14 +106,14 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
   };
 
   const limpiarPlaca = (placa) => {
-    return placa.replace(/-/g, "").toUpperCase().trim(); // 🔹 Elimina guiones y espacios extra
+    return placa.replace(/[\s-]/g, "").toUpperCase();
   };
   
   const handleNext = async () => {
-    let placaLimpia = limpiarPlaca(nPlaca); // 🔹 Limpiar la placa antes de enviar
+    let placaLimpia = limpiarPlaca(nPlaca);
     
     console.log("Datos actuales antes de avanzar:", {
-      nPlaca: placaLimpia, // 🔹 Usar la placa limpia
+      nPlaca: placaLimpia, 
       idCliente: data.idCliente,
       idClienteRC: data.idClienteRC,
       idTrabajo: data.idTrabajo,
