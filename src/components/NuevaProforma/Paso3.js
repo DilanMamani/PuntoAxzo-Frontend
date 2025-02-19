@@ -145,7 +145,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
       } else {
         console.log("Actualizando vehículo existente");
         await api.put(
-          `/api/vehiculos/${nPlaca}`,
+          `/api/vehiculos/${nPlaca.trim()}`,  // <--- Elimina espacios extras
           { idModelo: modelo, color },
           { headers: { Authorization: `Bearer ${token}` } }
         );

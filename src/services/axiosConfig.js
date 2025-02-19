@@ -41,27 +41,5 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor para manejar errores de respuesta
-api.interceptors.response.use(
-  (response) => response, // Si la respuesta es exitosa, la retorna
-  (error) => {
-    if (error.response) {
-      if (error.response.status === 401) {
-        // Token inválido o no autorizado
-        console.warn("Token inválido o no autorizado. Redirigiendo al login...");
-        localStorage.removeItem("authToken");
-        alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-        window.location.href = "/login"; // Redirigir al login
-      } else{ 
-        if (error.response.status === 403) {
-        console.warn("Acceso prohibido. Redirigiendo al login...");
-        alert("No tienes permiso para acceder a este recurso.");
-        window.location.href = "/login";
-      }
-    }
-    }
-    return Promise.reject(error);
-  }
-);
 
 export default api;

@@ -32,71 +32,33 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <MasterRoute>
-              <Register />
-            </MasterRoute>
-          }
-        />
-        <Route path="/companias" element={<ProtectedRoute><Companias /></ProtectedRoute>} />
-        <Route path="/proformas" element={<ProtectedRoute><Proformas /></ProtectedRoute>} /><Route path="/proformas/nuevaproforma" element={<NuevaProforma />} />
-        <Route path="/vehiculos" element={<ProtectedRoute><Vehiculos /></ProtectedRoute>} />
-        <Route path="/clientes" element={<ProtectedRoute><Clientes /></ProtectedRoute>} />
-        <Route path="/precios" element={<ProtectedRoute><Precios /></ProtectedRoute>} />
-        <Route path="/proformas/:idProforma/:placa" element={<BaseProformas />} />
-        <Route path="/paso5/:idProforma/:placa" element={<Paso5 />} />
-        <Route
-          path="/proformas/:idProforma/:idcliente/Cliente"
-          element={<ProtectedRoute><Cliente /></ProtectedRoute>}
-        />
-        <Route
-          path="/proformas/:idProforma/:nplaca/SeguroBroker"
-          element={<ProtectedRoute><SeguroBroker /></ProtectedRoute>}
-        />
-        <Route
-          path="/proformas/:idProforma/:nplaca/Detalles"
-          element={<ProtectedRoute><Detalles /></ProtectedRoute>}
-        />
-        <Route
-          path="/proformas/:idProforma/:nplaca/DetallesPlasticos"
-          element={<ProtectedRoute><DetallesPlasticos /></ProtectedRoute>}
-        />
-        <Route
-          path="/proformas/:idProforma/:nplaca/DetalleMecanica"
-          element={<ProtectedRoute><DetalleMecanica /></ProtectedRoute>}
-        />
-        <Route path="/proformas/:idProforma/:nplaca/Repuestos" element={<ProtectedRoute><Repuestos /></ProtectedRoute>} />
-        <Route path="/proformas/:idProforma/:nplaca/Vehiculo" element={<ProtectedRoute><Vehiculo /></ProtectedRoute>} />
-        <Route
-          path="/proformas/:idProforma/:nplaca/Anexo/:idProforma"
-          element={<ProtectedRoute><Anexo /></ProtectedRoute>}
-        />
-        <Route 
-          path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/detalles" 
-          element={<ProtectedRoute><DetallesAnexo /></ProtectedRoute>} 
-        />
-        
-        {/* Nueva Ruta para Detalles del Anexo */}
-        <Route 
-          path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/repuestos" 
-          element={<ProtectedRoute><RepuestosAnexo /></ProtectedRoute>} 
-        />
-        {
-          <Route path="/proformas/pendientes" element={<ProtectedRoute><Pendientes /></ProtectedRoute>} />
-        }
-      </Routes>
+  <Route path="/" element={<Navigate to="/home" />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+  <Route path="/register" element={<MasterRoute><Register /></MasterRoute>} />
+  <Route path="/companias" element={<ProtectedRoute><Companias /></ProtectedRoute>} />
+  <Route path="/proformas" element={<ProtectedRoute><Proformas /></ProtectedRoute>} />
+  <Route path="/proformas/nuevaproforma" element={<NuevaProforma />} />
+  <Route path="/vehiculos" element={<ProtectedRoute><Vehiculos /></ProtectedRoute>} />
+  <Route path="/clientes" element={<ProtectedRoute><Clientes /></ProtectedRoute>} />
+  <Route path="/precios" element={<ProtectedRoute><Precios /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:placa" element={<BaseProformas />} />
+  <Route path="/paso5/:idProforma/:placa" element={<Paso5 />} />
+  <Route path="/proformas/:idProforma/:idcliente/Cliente" element={<ProtectedRoute><Cliente /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/SeguroBroker" element={<ProtectedRoute><SeguroBroker /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Detalles" element={<ProtectedRoute><Detalles /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/DetallesPlasticos" element={<ProtectedRoute><DetallesPlasticos /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/DetalleMecanica" element={<ProtectedRoute><DetalleMecanica /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Repuestos" element={<ProtectedRoute><Repuestos /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Vehiculo" element={<ProtectedRoute><Vehiculo /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Anexo/:idProforma" element={<ProtectedRoute><Anexo /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/detalles" element={<ProtectedRoute><DetallesAnexo /></ProtectedRoute>} />
+  <Route path="/proformas/:idProforma/:nplaca/Anexo/:idanexo/repuestos" element={<ProtectedRoute><RepuestosAnexo /></ProtectedRoute>} />
+  <Route path="/proformas/pendientes" element={<ProtectedRoute><Pendientes /></ProtectedRoute>} />
+
+  {/* 🚀 Ruta comodín para redirigir cualquier otra ruta a /home */}
+  <Route path="*" element={<Navigate to="/home" />} />
+</Routes>
       <>
         <ToastContainer />
       </>
