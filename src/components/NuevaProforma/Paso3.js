@@ -128,7 +128,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
       idInspectorB: data.idInspectorB,
       idSeguro: data.idSeguro,
       modelo,
-      color,
+      color: color || "Sin Color especificado",
     });
   
     try {
@@ -139,7 +139,7 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
       }
   
       // Validar campos obligatorios
-      if (!placaLimpia || !modelo || !color) {
+      if (!placaLimpia || !modelo) {
         alert("Por favor, completa todos los campos del vehículo.");
         return;
       }
@@ -149,14 +149,14 @@ const Paso3 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
           console.log("Creando nuevo vehículo con placa:", placaLimpia);
           await api.post(
             "/api/vehiculos",
-            { nPlaca: placaLimpia, idModelo: modelo, color }, // 🔹 Enviar placa corregida
+            { nPlaca: placaLimpia, idModelo: modelo, color: color || "Sin Color especificado" }, // 🔹 Enviar placa corregida
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } else {
           console.log("Actualizando vehículo existente con placa:", placaLimpia);
           await api.put(
             `/api/vehiculos/${placaLimpia}`, // 🔹 Enviar placa corregida
-            { idModelo: modelo, color },
+            { idModelo: modelo, color: color || "Sin Color especificado" },
             { headers: { Authorization: `Bearer ${token}` } }
           );
         }

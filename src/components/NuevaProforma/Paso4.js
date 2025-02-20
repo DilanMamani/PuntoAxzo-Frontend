@@ -351,14 +351,23 @@ const [detalleSeleccionado, setDetalleSeleccionado] = useState(null);
 
         <label>Precio:</label>
         <input
-          type="number"
-          value={precio}
-          onChange={(e) => setPrecio(e.target.value)} // Permite modificar el precio
-          placeholder="Escribe el precio"
-        />
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]*"
+  value={precio}
+  onChange={(e) => setPrecio(e.target.value.replace(/\D/, ""))} // Solo permite números
+  placeholder="Escribe el precio"
+/>
 
         <label>Descuento (%):</label>
-        <input type="number" value={descuento} onChange={(e) => setDescuento(e.target.value)} />
+        <input
+  type="text"
+  inputMode="numeric"
+  pattern="[0-9]*"
+  value={descuento}
+  onChange={(e) => setDescuento(e.target.value.replace(/\D/, ""))} // Solo números
+  placeholder="Escribe el descuento"
+/>
 
         <button onClick={agregarDetalle}>Agregar Detalle</button>
       </div>
