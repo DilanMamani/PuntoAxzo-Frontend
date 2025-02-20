@@ -64,72 +64,65 @@ const Paso2 = ({ data, setData, avanzarPaso, retrocederPaso }) => {
 
   const handleNext = async () => {
     try {
-      const token = getToken();
-      if (!token) return;
-  
-      // Valores predeterminados
+            // Valores predeterminados
       const defaultTelefono = "00000000";
       const defaultCorreo = "S/C";
-  
-      // Asignar valores si los campos están vacíos
-      const finalTelefono = telefono.trim() || defaultTelefono;
-      const finalCorreo = correo.trim() || defaultCorreo;
-      const finalTelefonoRC = telefonoRC.trim() || defaultTelefono;
-      const finalCorreoRC = correoRC.trim() || defaultCorreo;
-  
+      const token = getToken();
+      if (!token) return;
+
       let newClienteId = clienteId;
-  
+
       // Guardar o actualizar Cliente Principal
       if (clienteId) {
         await api.put(
           `/clientes/${clienteId}`,
-          { nombre, telefono: finalTelefono, mail: finalCorreo },
+          { nombre,telefono: telefono||defaultTelefono, mail: correo||defaultCorreo },
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         const response = await api.post(
           `/clientes`,
-          { nombre, telefono: finalTelefono, mail: finalCorreo },
+          { nombre, telefono: telefono||defaultTelefono, mail: correo||defaultCorreo },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        newClienteId = response.data.data.idCliente; 
+        newClienteId = response.data.data.idCliente; // Asignar el nuevo ID
         setClienteId(newClienteId);
       }
-  
+
       let newClienteIdRC = clienteIdRC;
-  
+
       // Guardar o actualizar Cliente RC (si aplica)
       if (data.tipoTrabajo === 3) {
         if (clienteIdRC) {
           await api.put(
             `/clientes/${clienteIdRC}`,
-            { nombre: nombreRC, telefono: finalTelefonoRC, mail: finalCorreoRC },
+            { nombre: nombreRC, telefono: telefonoRC ||defaultTelefono, mail: correoRC ||defaultCorreo},
             { headers: { Authorization: `Bearer ${token}` } }
           );
         } else {
           const responseRC = await api.post(
             `/clientes`,
-            { nombre: nombreRC, telefono: finalTelefonoRC, mail: finalCorreoRC },
+            { nombre: nombreRC, telefono: telefonoRC ||defaultTelefono, mail: correoRC ||defaultCorreo },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          newClienteIdRC = responseRC.data.data.idCliente;
+          newClienteIdRC = responseRC.data.data.idCliente; // Asignar el nuevo ID
           setClienteIdRC(newClienteIdRC);
         }
       }
-  
       // Actualizar estado global
+      console.log('Actualizando datos globales en setData...');
       setData((prevData) => ({
         ...prevData,
         idCliente: newClienteId,
         idClienteRC: data.tipoTrabajo === 3 ? newClienteIdRC : null,
         nombre,
-        telefono: finalTelefono,
-        correo: finalCorreo,
+        telefono: telefono || defaultTelefono,
+        correo: correo || defaultCorreo,
         nombreRC,
-        telefonoRC: finalTelefonoRC,
-        correoRC: finalCorreoRC,
+        telefonoRC: telefonoRC || defaultTelefono,
+        correoRC: correoRC || defaultCorreo,
       }));
-  
+
       avanzarPaso();
     } catch (error) {
       console.error('Error al guardar el cliente:', error);
