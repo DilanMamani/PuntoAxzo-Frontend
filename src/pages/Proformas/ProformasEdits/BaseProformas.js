@@ -459,20 +459,9 @@ const handleFotosChange = (e) => {
                 if (confirmar.isConfirmed) {
                   try {
                     const token = getToken();
-                    // Corregir desfase de zona horaria: si el valor es string, sumar 1 día
-                    let fechaEnviar = nuevaFecha;
-                    if (typeof nuevaFecha === "string") {
-                      const fechaCorregida = new Date(nuevaFecha);
-                      fechaCorregida.setDate(fechaCorregida.getDate() + 1);
-                      fechaEnviar = fechaCorregida.toISOString().split("T")[0];
-                    }
-                    await api.put(
-                      `/api/proformas/${idProforma}/updateFecha`,
-                      { fecha: fechaEnviar },
-                      {
-                        headers: { Authorization: `Bearer ${token}` }
-                      }
-                    );
+                    await api.put(`/api/proformas/${idProforma}/updateFecha`, { fecha: nuevaFecha }, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    });
                     Swal.fire("Éxito", "La fecha fue actualizada correctamente.", "success");
                     setEditandoFecha(false);
                     fetchProformaData();
