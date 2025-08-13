@@ -12,6 +12,8 @@ import PdfCreateProforma from "./PdfCreateProforma";
 
 import PdfViewer from "../../../components/PdfViewer";
 
+import { FaCalendarAlt } from "react-icons/fa";
+
 const BaseProformas = () => {
   const logoURL = require("../../../assets/LogoPuntoAxzo.jpg");
   const { idProforma } = useParams();
@@ -31,6 +33,10 @@ const BaseProformas = () => {
   const [detallesMecanica, setDetallesMecanica] = useState([]);
 
   const getToken = () => localStorage.getItem("token");
+
+  // Estados para edición de fecha
+  const [editandoFecha, setEditandoFecha] = useState(false);
+  const [nuevaFecha, setNuevaFecha] = useState("");
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const [fotos, setFotos] = useState([]);
@@ -379,6 +385,8 @@ const handleFotosChange = (e) => {
 
   const handleConfirmar = () => navigate("/proformas");
 
+  // (Eliminada la función handleCambiarFecha, ahora se maneja inline)
+
   return (
     <div className="home-container">
       {/* Barra de navegación superior */}
@@ -414,8 +422,72 @@ const handleFotosChange = (e) => {
           <strong>ID Proforma:</strong> {idProforma}
         </p>
         <p>
-          <strong>Fecha:</strong> {proformaData.fecha || "No disponible"}
+          <strong>Fecha:</strong> {proformaData.fecha || "No disponible"}{" "}
+          <FaCalendarAlt
+            title="Editar fecha"
+            onClick={() => {
+              setEditandoFecha(true);
+              setNuevaFecha(""); // Limpiar selección previa
+            }}
+            style={{ cursor: "pointer", marginLeft: "8px", color: "#007bff" }}
+          />
         </p>
+        {editandoFecha && (
+          <div style={{ marginTop: "5px" }}>
+            <input
+              type="date"
+              max={new Date().toISOString().split("T")[0]}
+              defaultValue={proformaData.fecha}
+              onChange={(e) => setNuevaFecha(e.target.value)}
+            />
+            <span style={{ marginLeft: "10px" }}>{nuevaFecha}</span>
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={async () => {
+                if (!nuevaFecha) {
+                  Swal.fire("Error", "Debe seleccionar una fecha válida.", "error");
+                  return;
+                }
+                const confirmar = await Swal.fire({
+                  title: "¿Confirmar cambio de fecha?",
+                  text: `La nueva fecha será ${nuevaFecha}`,
+                  icon: "question",
+                  showCancelButton: true,
+                  confirmButtonText: "Sí, confirmar",
+                  cancelButtonText: "Cancelar",
+                });
+                if (confirmar.isConfirmed) {
+                  try {
+                    const token = getToken();
+                    // Corregir desfase de zona horaria: si el valor es string, sumar 1 día
+                    let fechaEnviar = nuevaFecha;
+                    if (typeof nuevaFecha === "string") {
+                      const fechaCorregida = new Date(nuevaFecha);
+                      fechaCorregida.setDate(fechaCorregida.getDate() + 1);
+                      fechaEnviar = fechaCorregida.toISOString().split("T")[0];
+                    }
+                    await api.put(
+                      `/api/proformas/${idProforma}/updateFecha`,
+                      { fecha: fechaEnviar },
+                      {
+                        headers: { Authorization: `Bearer ${token}` }
+                      }
+                    );
+                    Swal.fire("Éxito", "La fecha fue actualizada correctamente.", "success");
+                    setEditandoFecha(false);
+                    fetchProformaData();
+                  } catch (error) {
+                    console.error("Error al actualizar la fecha:", error);
+                    const msg = error.response?.data?.error || "Error desconocido.";
+                    Swal.fire("Error", msg, "error");
+                  }
+                }
+              }}
+            >
+              Confirmar cambio
+            </button>
+          </div>
+        )}
         <p>
           <strong>Vigente Hasta:</strong> {proformaData.fechavigencia || "No disponible"}
         </p>
