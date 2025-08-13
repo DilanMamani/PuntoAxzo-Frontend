@@ -356,14 +356,33 @@ const notaValidez = `
     const options = {
       margin: 0.5,
       filename: proformaData.tipotrabajo?.tipoTrabajo === "Particular"
-      ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
-      : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`,
+        ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
+        : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
     html2pdf().set(options).from(pdfContent).save();
+  };
+
+  // Función para vista previa PDF en nueva pestaña usando Blob
+  const handlePreviewPDF = async () => {
+    const pdfContent = generatePDFContent();
+
+    const options = {
+      margin: 0.5,
+      filename: proformaData.tipotrabajo?.tipoTrabajo === "Particular"
+        ? `${proformaData.nplaca}-${marca}-${proformaData.numerop}${proformaData.anio}.pdf`
+        : `${proformaData.nplaca}-${marca}-${proformaData.seguro?.nombreSeguro || "SinSeguro"}-${proformaData.numerop}${proformaData.anio}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
+    const pdfBlob = await html2pdf().set(options).from(pdfContent).output('blob');
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    window.open(blobUrl, '_blank');
   };
   const handleSendEmail = async () => {
     setIsLoading(true);
@@ -456,7 +475,8 @@ const notaValidez = `
 
   return (
     <div>
-    <button onClick={handleDownloadPDF}>Descargar PDF</button>
+      <button onClick={handleDownloadPDF}>Descargar PDF</button>
+      <button onClick={handlePreviewPDF} style={{ marginLeft: "10px" }}>Imprimir</button>
       <button onClick={() => setIsModalOpen(true)}>Enviar a Correos</button>
 
       {isModalOpen && (
