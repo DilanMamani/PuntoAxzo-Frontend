@@ -383,6 +383,13 @@ const handleFotosChange = (e) => {
     );
   }
 
+  // Utilidad para formatear fecha YYYY-MM-DD a DD/MM/YYYY
+  const formatearFecha = (fechaISO) => {
+    if (!fechaISO) return "No disponible";
+    const [a, m, d] = fechaISO.split("-");
+    return `${d}/${m}/${a}`;
+  };
+
   const handleConfirmar = () => navigate("/proformas");
 
   // (Eliminada la función handleCambiarFecha, ahora se maneja inline)
@@ -422,7 +429,7 @@ const handleFotosChange = (e) => {
           <strong>ID Proforma:</strong> {idProforma}
         </p>
         <p>
-          <strong>Fecha:</strong> {proformaData.fecha || "No disponible"}{" "}
+          <strong>Fecha:</strong> {formatearFecha(proformaData.fecha)}{" "}
           <FaCalendarAlt
             title="Editar fecha"
             onClick={() => {
@@ -440,7 +447,7 @@ const handleFotosChange = (e) => {
               defaultValue={proformaData.fecha}
               onChange={(e) => setNuevaFecha(e.target.value)}
             />
-            <span style={{ marginLeft: "10px" }}>{nuevaFecha}</span>
+            <span style={{ marginLeft: "10px" }}>{formatearFecha(nuevaFecha)}</span>
             <button
               style={{ marginLeft: "10px" }}
               onClick={async () => {
@@ -450,7 +457,7 @@ const handleFotosChange = (e) => {
                 }
                 const confirmar = await Swal.fire({
                   title: "¿Confirmar cambio de fecha?",
-                  text: `La nueva fecha será ${nuevaFecha}`,
+                  text: `La nueva fecha será ${formatearFecha(nuevaFecha)}`,
                   icon: "question",
                   showCancelButton: true,
                   confirmButtonText: "Sí, confirmar",
@@ -478,7 +485,7 @@ const handleFotosChange = (e) => {
           </div>
         )}
         <p>
-          <strong>Vigente Hasta:</strong> {proformaData.fechavigencia || "No disponible"}
+          <strong>Vigente Hasta:</strong> {formatearFecha(proformaData.fechavigencia)}
         </p>
       </div>
       
