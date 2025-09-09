@@ -426,9 +426,6 @@ const handleFotosChange = (e) => {
       <div className="proforma-section">
         <h2>Datos Principales</h2>
         <p>
-          <strong>ID Proforma:</strong> {idProforma}
-        </p>
-        <p>
           <strong>Fecha:</strong> {formatearFecha(proformaData.fecha)}{" "}
           <FaCalendarAlt
             title="Editar fecha"
