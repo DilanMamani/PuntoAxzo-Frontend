@@ -47,7 +47,6 @@ const PdfCreateProforma = ({ proformaData, detalles, detallesPlasticos, detalles
     <p style="margin: 0; font-size: 12px;">(Expresado en ${monedas})</p>
   </div>
   <div style="flex: 1; text-align: right; font-size: 10px;">
-    <p style="margin: 0;"><strong>Codigo:</strong> ${String(idProforma).padStart(7, '0')}</p>
     <p style="margin: 0;">Fecha: ${proformaData.fecha || "N/A"}</p>
   </div>
 </div>
